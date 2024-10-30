@@ -6,4 +6,3 @@ export { getAllPosts, getPostBySlug };
 export function getAllPostSlugs(): string[] {
   return getAllPosts().map(post => post.slug);
 }
-
