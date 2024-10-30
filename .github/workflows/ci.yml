@@ -6,11 +6,6 @@ on:
     paths-ignore:
       - '**/*.css'
       - 'docs/**'
-  pull_request:
-    branches: [ main ]
-    paths-ignore:
-      - '**/*.css'
-      - 'docs/**'
 
 permissions:
   contents: read
