@@ -170,7 +170,7 @@ export const AboutPage: React.FC = () => {
                         <CardHeader className="md:flex gap-8 p-4">
                             <div className="relative md:w-[300px] aspect-square overflow-hidden">
                                 <motion.img
-                                    src="/public/me.jpg"
+                                    src="/me.jpg"
                                     alt="Cooper Wallace"
                                     className="w-full object-cover"
                                     whileHover={{ scale: 1.05 }}

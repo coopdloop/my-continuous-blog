@@ -40,7 +40,7 @@ const App: React.FC = () => {
                                         whileHover={{ scale: 1.1 }}
                                         whileTap={{ scale: 0.95 }}
                                     >
-                                        <img src="/public/linkedin.png" className='w-5 h-5' alt='linkedin' />
+                                        <img src="/linkedin.png" className='w-5 h-5' alt='linkedin' />
                                         <span>LinkedIn</span>
                                     </motion.a>
                                     <motion.a
@@ -51,7 +51,7 @@ const App: React.FC = () => {
                                         whileHover={{ scale: 1.1 }}
                                         whileTap={{ scale: 0.95 }}
                                     >
-                                        <img src="/public/github.png" className='w-5 h-5' alt='github' />
+                                        <img src="/github.png" className='w-5 h-5' alt='github' />
                                         <span>GitHub</span>
                                     </motion.a>
                                 </div>
