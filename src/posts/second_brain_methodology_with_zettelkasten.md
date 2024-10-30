@@ -17,11 +17,12 @@ tags: notes, efficiency, repository, information, zettelkasten, obsidian, notion
   - [Lets talk methods and concepts](#lets-talk-methods-and-concepts)
     - [Zettelkasten](#zettelkasten)
     - [Knowledge Management System](#knowledge-management-system)
-    - [Quick formatted notes (Markdown)](#quick-formatted-notes-markdown)
+    - [Quick formatted notes](#quick-formatted-notes-markdown)
     - [Note taking workflows](#note-taking-workflows)
   - [Obsidian and Notion AI workflow](#obsidian-and-notion-ai-workflow)
   - [What's Next](#whats-next)
   - [Inspiration and References](#inspiration-and-references)
+
 ---
 
 # Introduction

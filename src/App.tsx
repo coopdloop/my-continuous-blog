@@ -5,49 +5,63 @@ import { NavBar } from '@/components/NavBar';
 import { HomePage } from '@/components/HomePage';
 import { BlogPost } from '@/components/BlogPost';
 import { AboutPage } from '@/components/AboutPage';
-import { TagsPage } from '@/components/TagsPage';
-import CoffeeWidget from './components/coffee/BuyMeACoffeeWidget';
+import { motion } from 'framer-motion';
 
 const App: React.FC = () => {
-  return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <Router>
-        <div className="min-h-screen bg-background text-foreground flex flex-col">
-          <NavBar />
-          <main className="flex-grow container mx-auto px-4 py-4 cyber-grid transition-all">
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/post/:slug" element={<BlogPost />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/tags" element={<TagsPage />} />
-            </Routes>
-          </main>
-          <footer className="bg-slate-800 border-t py-2 text-md flex flex-col gap-2 items-center">
-            <div className="container mx-auto text-center">
-              © 2024 Cooper Wallace. All rights reserved.
-            </div>
-            <a
-              href='https://www.linkedin.com'
-              target='_blank'
-              className='flex gap-2'>
-              <img src="/public/linkedin.png" className='w-6 h-6' alt='linkedin' />
-              Linkedin
-            </a>
-            <a
-              href='https://www.github.com'
-
-              target='_blank'
-              className='flex gap-2'>
-              <img src="/public/github.png" className='w-6 h-6' alt='linkedin' />
-              Github
-            </a>
-
-          </footer>
-        </div>
-        <CoffeeWidget />
-      </Router>
-    </ThemeProvider>
-  );
+    return (
+        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+            <Router>
+                <div className="min-h-screen bg-background text-foreground flex flex-col relative">
+                    <NavBar />
+                    <main className="flex-grow container mx-auto px-4 py-4 cyber-grid transition-all">
+                        <Routes>
+                            <Route path="/" element={<HomePage />} />
+                            <Route path="/post/:slug" element={<BlogPost />} />
+                            <Route path="/about" element={<AboutPage />} />
+                        </Routes>
+                    </main>
+                    <footer className="bg-background/80 backdrop-blur-md border-t border-primary/10 py-4">
+                        <div className="container mx-auto max-w-7xl px-4">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                                <div className="text-center md:text-left">
+                                    <motion.p
+                                        className="text-sm text-muted-foreground"
+                                        whileHover={{ scale: 1.02 }}
+                                    >
+                                        © 2024 Cooper Wallace. All rights reserved.
+                                    </motion.p>
+                                </div>
+                                <div className="flex justify-center space-x-6">
+                                    <motion.a
+                                        href='https://www.linkedin.com/in/cooper-wallace-0a572a158'
+                                        target='_blank'
+                                        rel="noopener noreferrer"
+                                        className='flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors'
+                                        whileHover={{ scale: 1.1 }}
+                                        whileTap={{ scale: 0.95 }}
+                                    >
+                                        <img src="/public/linkedin.png" className='w-5 h-5' alt='linkedin' />
+                                        <span>LinkedIn</span>
+                                    </motion.a>
+                                    <motion.a
+                                        href='https://www.github.com/coopdloop'
+                                        target='_blank'
+                                        rel="noopener noreferrer"
+                                        className='flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors'
+                                        whileHover={{ scale: 1.1 }}
+                                        whileTap={{ scale: 0.95 }}
+                                    >
+                                        <img src="/public/github.png" className='w-5 h-5' alt='github' />
+                                        <span>GitHub</span>
+                                    </motion.a>
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            </Router>
+        </ThemeProvider>
+    );
 }
 
 export default App;

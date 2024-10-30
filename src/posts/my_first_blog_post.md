@@ -6,7 +6,7 @@ ttr: 2 min
 author: Cooper Wallace
 authorImage: "https://blog-photo-bucket.s3.amazonaws.com/high_qual_pfp_informal_cropped_circle.jpg"
 authorImageAlt: "Cooper Wallace"
-image: "https://docs.astro.build/assets/full-logo-light.png"
+image: ""
 imageAlt: "The full Astro logo."
 tags: learning, full-stack, web-development
 projectLink: "https://github.com/coopdloop/Astro-Blog"

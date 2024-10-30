@@ -1,0 +1,91 @@
+name: Deploy Blog Post
+
+on:
+  workflow_run:
+    workflows: ["CI Pipeline"]
+    types:
+      - completed
+
+permissions:
+  contents: read
+  id-token: write # This is required for requesting the JWT
+  issues: write
+  pull-requests: write
+
+jobs:
+  build-and-deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies for script
+        run: npm add @actions/github @actions/core
+
+      - name: Get latest Node.js version
+        id: get-node-version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node .github/scripts/get-latest-node-version.js
+
+      - name: Setup Node.js with latest version
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ steps.get-node-version.outputs.node-version }}
+          cache: 'npm'
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::510046314388:role/github.to.aws.oicd
+          aws-region: us-east-1
+
+      - name: Install modules
+        run: npm install
+
+      - name: Build application
+        run: npm build
+
+      - name: Deploy to S3
+        run: aws s3 sync --delete ./dist/ s3://${{ secrets.BUCKET_ID }}
+
+      - name: Create CloudFront invalidation
+        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/*"
+
+  dast:
+    needs: build-and-deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: ZAP Scan
+      uses: zaproxy/action-full-scan@v0.10.0
+      with:
+        target: 'https://www.devsec-cooper.codes/'
+
+    - name: Create Issue from ZAP Report
+      if: failure()
+      uses: actions/github-script@v6
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          const fs = require('fs')
+          try {
+            const zapReport = JSON.parse(fs.readFileSync('zap-full-scan-results.json', 'utf8'))
+            const highAlerts = zapReport.site[0].alerts.filter(alert => alert.riskcode === "3")
+            if (highAlerts.length > 0) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: 'High Risk Vulnerabilities Detected',
+                body: `ZAP scan detected ${highAlerts.length} high risk vulnerabilities. Please review the full scan results.`
+              })
+            }
+          } catch (error) {
+            core.setFailed(`Failed to process ZAP report: ${error.message}`)
+          }

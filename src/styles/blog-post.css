@@ -45,3 +45,31 @@
 .blog-post-content img {
   @apply max-w-full h-auto rounded-lg shadow-md my-4;
 }
+
+.blog-post-content {
+  scroll-behavior: smooth;
+}
+
+.blog-post-content h1,
+.blog-post-content h2,
+.blog-post-content h3,
+.blog-post-content h4 {
+  scroll-margin-top: 100px;
+}
+
+/* Style for table of contents */
+.blog-post-content .toc {
+  @apply bg-background/50 backdrop-blur-sm border border-primary/10 rounded-lg p-4 my-6;
+}
+
+.blog-post-content .toc ul {
+  @apply list-none pl-4 my-2;
+}
+
+.blog-post-content .toc a {
+  @apply text-primary hover:text-primary/80 no-underline hover:underline transition-colors duration-200;
+}
+
+.blog-post-content .toc li {
+  @apply my-1;
+}
