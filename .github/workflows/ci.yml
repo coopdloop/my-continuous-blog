@@ -19,27 +19,27 @@ permissions:
   pull-requests: write
 
 jobs:
-  check_changes:
-    runs-on: ubuntu-latest
-    outputs:
-      should_run: ${{ steps.check.outputs.should_run }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Fetch all history for all branches and tags
-      - name: Check for code changes
-        id: check
-        run: |
-          git diff --name-only ${{ github.event.before }} ${{ github.sha }} > changes.txt
-          if grep -qvE '(\.css|\.md|docs/)' changes.txt; then
-            echo "should_run=true" >> $GITHUB_OUTPUT
-          else
-            echo "should_run=false" >> $GITHUB_OUTPUT
-          fi
+  # check_changes:
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     should_run: ${{ steps.check.outputs.should_run }}
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0  # Fetch all history for all branches and tags
+  #     - name: Check for code changes
+  #       id: check
+  #       run: |
+  #         git diff --name-only ${{ github.event.before }} ${{ github.sha }} > changes.txt
+  #         if grep -qvE '(\.css|\.md|docs/)' changes.txt; then
+  #           echo "should_run=true" >> $GITHUB_OUTPUT
+  #         else
+  #           echo "should_run=false" >> $GITHUB_OUTPUT
+  #         fi
 
   pre-commit:
-    needs: check_changes
-    if: needs.check_changes.outputs.should_run == 'true'
+    # needs: check_changes
+    # if: needs.check_changes.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
