@@ -124,11 +124,6 @@ export const PostsPage: React.FC = () => {
         }));
     };
 
-    const clearFilters = () => {
-        setFilters({ tags: [], search: '' });
-        setShowTagPanel(false);
-    };
-
     const PostCard: React.FC<{ post: BlogPost }> = ({ post }) => (
         <motion.div
             layout
