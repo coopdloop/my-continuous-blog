@@ -27,4 +27,3 @@ export interface RecentSearch {
   term: string;
   timestamp: number;
 }
-
