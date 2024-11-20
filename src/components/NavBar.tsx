@@ -1,23 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ModeToggle } from "@/components/mode-toggle"
-import { Button } from "@/components/ui/button"
-import { HomeIcon, InfoIcon, CodeIcon, MenuIcon, XIcon } from 'lucide-react'
+import { ModeToggle } from "@/components/mode-toggle";
+import { Button } from "@/components/ui/button";
+import { HomeIcon, InfoIcon, CodeIcon, MenuIcon, XIcon, BookOpenIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import CoffeeButton from './coffee/BuyMeACoffeeButton';
+
+interface NavLinkProps {
+    to: string;
+    icon: React.ReactNode;
+    children: React.ReactNode;
+}
 
 export const NavBar: React.FC = () => {
     const location = useLocation();
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [lastScrollY, setLastScrollY] = useState(0);
-    const [isVisible, setIsVisible] = useState(true);
+    const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+    const [lastScrollY, setLastScrollY] = useState<number>(0);
+    const [isVisible, setIsVisible] = useState<boolean>(true);
     const menuRef = useRef<HTMLDivElement>(null);
 
-    const isActive = (path: string) => location.pathname === path;
+    const isActive = (path: string): boolean => location.pathname === path;
 
-    // Handle scroll behavior
     useEffect(() => {
-        const handleScroll = () => {
+        const handleScroll = (): void => {
             const currentScrollY = window.scrollY;
 
             if (currentScrollY > lastScrollY && currentScrollY > 100) {
@@ -34,9 +38,8 @@ export const NavBar: React.FC = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, [lastScrollY]);
 
-    // Handle click outside
     useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
+        const handleClickOutside = (event: MouseEvent): void => {
             if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
                 setIsMenuOpen(false);
             }
@@ -46,22 +49,20 @@ export const NavBar: React.FC = () => {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    // Close menu on location change
     useEffect(() => {
         setIsMenuOpen(false);
     }, [location]);
 
-    const NavLink: React.FC<{ to: string; icon: React.ReactNode; children: React.ReactNode }> = ({ to, icon, children }) => (
+    const NavLink: React.FC<NavLinkProps> = ({ to, icon, children }) => (
         <Link to={to}>
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button
                     variant={isActive(to) ? "default" : "ghost"}
                     size="sm"
-                    className={`w-full justify-start transition-all duration-300 ${
-                        isActive(to)
-                            ? "bg-primary text-primary-foreground"
-                            : "hover:bg-primary/10"
-                    }`}
+                    className={`w-full justify-start transition-all duration-300 ${isActive(to)
+                        ? "bg-amber-500 text-slate-900"
+                        : "hover:bg-amber-500/10 text-slate-200"
+                        }`}
                 >
                     {icon}
                     <span className="ml-2">{children}</span>
@@ -72,7 +73,7 @@ export const NavBar: React.FC = () => {
 
     return (
         <motion.nav
-            className="bg-background/60 backdrop-blur-md border-b border-primary/10 sticky top-0 z-50"
+            className="bg-slate-950/50 backdrop-blur-md border-b border-amber-500/10 sticky top-0 z-50"
             initial={{ y: 0 }}
             animate={{ y: isVisible ? 0 : -100 }}
             transition={{ duration: 0.3 }}
@@ -94,6 +95,7 @@ export const NavBar: React.FC = () => {
                     <div className="hidden md:flex items-center space-x-4">
                         <NavLink to="/" icon={<HomeIcon className="h-4 w-4" />}>Home</NavLink>
                         <NavLink to="/about" icon={<InfoIcon className="h-4 w-4" />}>About</NavLink>
+                        <NavLink to="/posts" icon={<BookOpenIcon className="h-4 w-4" />}>Posts</NavLink>
                         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                             <a
                                 href="https://github.com/coopdloop/my-continuous-blog"
@@ -109,9 +111,6 @@ export const NavBar: React.FC = () => {
                                     Source
                                 </Button>
                             </a>
-                        </motion.div>
-                        <motion.div whileHover={{ scale: 1.05 }}>
-                            <CoffeeButton />
                         </motion.div>
                         <motion.div whileHover={{ scale: 1.05 }}>
                             <ModeToggle />
@@ -148,6 +147,7 @@ export const NavBar: React.FC = () => {
                             <div className="px-4 py-3 space-y-3">
                                 <NavLink to="/" icon={<HomeIcon className="h-4 w-4" />}>Home</NavLink>
                                 <NavLink to="/about" icon={<InfoIcon className="h-4 w-4" />}>About</NavLink>
+                                <NavLink to="/posts" icon={<BookOpenIcon className="h-4 w-4" />}>Posts</NavLink>
                                 <motion.div whileHover={{ scale: 1.05 }}>
                                     <a
                                         href="https://github.com/coopdloop/my-continuous-blog"
@@ -166,9 +166,6 @@ export const NavBar: React.FC = () => {
                                     </a>
                                 </motion.div>
                                 <div className="flex justify-between items-center">
-                                    <motion.div whileHover={{ scale: 1.05 }}>
-                                        <CoffeeButton />
-                                    </motion.div>
                                     <motion.div whileHover={{ scale: 1.05 }}>
                                         <ModeToggle />
                                     </motion.div>

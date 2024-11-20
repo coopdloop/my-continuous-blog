@@ -22,3 +22,9 @@ export interface BlogPost {
   };
   content: string;
 }
+
+export interface RecentSearch {
+  term: string;
+  timestamp: number;
+}
+
