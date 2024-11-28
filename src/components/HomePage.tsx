@@ -1,102 +1,129 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { getAllPosts } from '@/utils/markdown-loader';
 import { BlogPost } from '@/types/blog';
 import { RecentPosts } from './RecentPosts';
+import { Star } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
 
 export const HomePage: React.FC = () => {
     const [posts, setPosts] = useState<BlogPost[]>([]);
+    const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
         const fetchedPosts = getAllPosts();
-        setPosts(fetchedPosts.slice(0,3));
+        setPosts(fetchedPosts.slice(0, 3));
+        setIsVisible(true);
     }, []);
 
     return (
-        <div className="relative">
-            {/* Hero Section */}
-            <div className="relative mb-16">
-
-                {/* Ambient Effects */}
-                <div className="absolute inset-0 -z-5">
-                    <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl animate-pulse" />
-                    <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl animate-pulse" />
-                </div>
-
-
-                <div className="relative pb-4 px-4">
+        <div className="relative min-h-screen  overflow-hidden">
+            {/* Ambient Space Background */}
+            <div className="fixed inset-0 -z-10">
+                <div className="absolute inset-0 bg-gradient-to-b " />
+                {/* Planet */}
+                <div className="absolute top-20 right-20 w-48 h-48 rounded-full  blur-sm" />
+                {/* Stars */}
+                {[...Array(50)].map((_, i) => (
                     <motion.div
-                        className="max-w-4xl mx-auto text-center space-y-8"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8 }}
-                    >
-                        <motion.h1
-                            className="text-6xl md:text-7xl font-black"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2 }}
-                        >
-                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-purple-400 to-amber-200">
-                                Engineering Beyond Boundaries
-                            </span>
-                        </motion.h1>
+                        key={i}
+                        className="absolute w-1 h-1 bg-white rounded-full"
+                        style={{
+                            left: `${Math.random() * 100}%`,
+                            top: `${Math.random() * 100}%`,
+                        }}
+                        animate={{
+                            opacity: [0.2, 1, 0.2],
+                            scale: [1, 1.5, 1],
+                        }}
+                        transition={{
+                            duration: Math.random() * 3 + 2,
+                            repeat: Infinity,
+                            repeatType: "reverse",
+                        }}
+                    />
+                ))}
+            </div>
 
+            <div className="px-4 pt-24 pb-16">
+                <AnimatePresence>
+                    {isVisible && (
                         <motion.div
-                            className="prose prose-invert mx-auto max-w-2xl space-y-6"
+                            className="max-w-4xl mx-auto space-y-16"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            transition={{ delay: 0.4 }}
+                            transition={{ duration: 1.2 }}
                         >
-                            <p className="text-xl text-slate-300 leading-relaxed">
-                                Welcome to a realm where engineering transcends the ordinary—where
-                                visionaries manipulate the fabric of reality itself to forge
-                                tomorrow's innovations.
-                            </p>
-
-                            <p className="text-lg text-slate-400 leading-relaxed">
-                                Like ancient astronomers who moved celestial bodies with mathematical precision,
-                                today's engineering geniuses orchestrate complex systems into elegant solutions.
-                                Here, we document this eternal dance between human ingenuity and technological possibilities.
-                            </p>
-                        </motion.div>
-
-                        {/* Floating Elements */}
-                        <div className="absolute inset-0 pointer-events-none">
-                            {/* Geometric shapes floating around */}
-                            {[...Array(5)].map((_, i) => (
+                            {/* Hero Section */}
+                            <div className="text-center space-y-8">
                                 <motion.div
-                                    key={i}
-                                    className="absolute"
-                                    style={{
-                                        left: `${Math.random() * 100}%`,
-                                        top: `${Math.random() * 100}%`,
-                                    }}
-                                    animate={{
-                                        y: [0, -20, 0],
-                                        rotate: [0, 360],
-                                        scale: [1, 1.2, 1],
-                                    }}
-                                    transition={{
-                                        duration: Math.random() * 5 + 5,
-                                        repeat: Infinity,
-                                        repeatType: "reverse",
-                                    }}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.3 }}
                                 >
-                                    <div
-                                        className="w-8 h-8 border border-amber-500/20 rounded-lg transform rotate-45"
-                                        style={{
-                                            background: `radial-gradient(circle at center, rgba(251,191,36,0.1) 0%, transparent 70%)`
-                                        }}
-                                    />
+                                    <h1 className="text-6xl md:text-7xl font-bold tracking-tight mb-6">
+                                        <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-200 via-yellow-200 to-orange-200">
+                                            Engineering Expertise
+                                        </span>
+                                    </h1>
+                                    <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                                        I build software at the edge of possibility.
+                                        Where human ingenuity meets artificial intelligence
+                                        to create systems of unprecedented capability.
+                                    </p>
                                 </motion.div>
-                            ))}
-                        </div>
-                    </motion.div>
-                </div>
 
-                {/* Recent Posts Section */}
-                <RecentPosts posts={posts} />
+                                {/* Divider */}
+                                <motion.div
+                                    className="flex items-center justify-center space-x-4"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 0.6 }}
+                                >
+                                    <div className="h-px w-16 bg-gradient-to-r from-transparent via-orange-500/50 to-transparent" />
+                                    <Star className="w-4 h-4 text-orange-500/50" />
+                                    <div className="h-px w-16 bg-gradient-to-r from-transparent via-orange-500/50 to-transparent" />
+                                </motion.div>
+
+                                {/* Blog Preview Section */}
+                                <motion.div
+                                    className="relative pt-8"
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.9 }}
+                                >
+                                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-orange-900/5 to-transparent blur-3xl" />
+                                    <RecentPosts posts={posts} />
+                                </motion.div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </div>
+
+            {/* Floating Particles */}
+            <div className="absolute inset-0 pointer-events-none">
+                {[...Array(20)].map((_, i) => (
+                    <motion.div
+                        key={i}
+                        className="absolute w-2 h-2"
+                        style={{
+                            left: `${Math.random() * 100}%`,
+                            top: `${Math.random() * 100}%`,
+                        }}
+                        animate={{
+                            y: [0, -30, 0],
+                            x: [0, Math.random() * 20 - 10, 0],
+                            opacity: [0.2, 0.5, 0.2],
+                        }}
+                        transition={{
+                            duration: Math.random() * 8 + 8,
+                            repeat: Infinity,
+                            repeatType: "reverse",
+                        }}
+                    >
+                        <div className="w-full h-full rounded-full bg-orange-500/20" />
+                    </motion.div>
+                ))}
             </div>
         </div>
     );

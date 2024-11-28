@@ -76,36 +76,6 @@ body {
   @apply bg-background text-foreground transition-colors duration-300;
 }
 
-/* Light theme cyber grid */
-.light .cyber-grid {
-  background-image:
-    linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
-  background-size: 30px 30px;
-}
-
-/* Dark theme cyber grid */
-.dark .cyber-grid {
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-  background-size: 30px 30px;
-}
-
-/* Light theme glow */
-.light .glow {
-  box-shadow: 0 0 10px rgba(0, 0, 255, 0.2),
-              0 0 20px rgba(0, 0, 255, 0.1),
-              0 0 30px rgba(0, 0, 255, 0.05);
-}
-
-/* Dark theme glow */
-.dark .glow {
-  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5),
-              0 0 20px rgba(0, 255, 255, 0.3),
-              0 0 30px rgba(0, 255, 255, 0.1);
-}
-
 /* Add smooth transitions for theme switching */
 * {
   @apply transition-colors duration-200;
