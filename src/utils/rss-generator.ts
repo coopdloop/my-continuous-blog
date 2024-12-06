@@ -2,10 +2,10 @@
 import { BlogPost } from '@/types/blog';
 
 export const generateRSSFeed = (posts: BlogPost[]): string => {
-  const siteUrl = import.meta.env.VITE_SITE_URL;
-  const today = new Date().toUTCString();
+    const siteUrl =  "https://www.devsec-cooper.codes"
+    const today = new Date().toUTCString();
 
-  const rssItems = posts.map(post => `
+    const rssItems = posts.map(post => `
     <item>
       <title><![CDATA[${post.frontmatter.title}]]></title>
       <link>${siteUrl}/post/${post.slug}</link>
@@ -18,7 +18,7 @@ export const generateRSSFeed = (posts: BlogPost[]): string => {
     </item>
   `).join('\n');
 
-  return `<?xml version="1.0" encoding="UTF-8"?>
+    return `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0"
   xmlns:content="http://purl.org/rss/1.0/modules/content/"
   xmlns:dc="http://purl.org/dc/elements/1.1/"

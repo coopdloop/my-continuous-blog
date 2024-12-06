@@ -9,7 +9,7 @@ const PageTemplate: React.FC<PageMetaData> = ({
     type,
     author
 }) => {
-    const siteUrl = import.meta.env.VITE_SITE_URL || 'https://yourblog.com';
+    const siteUrl = 'https://www.devsec-cooper.codes';
 
     return (
         <html lang="en">
