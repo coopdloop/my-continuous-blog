@@ -1,142 +1,258 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { CalendarIcon, ClockIcon } from 'lucide-react'
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { CalendarIcon, ClockIcon, ListIcon, LinkIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { getPostBySlug } from '@/utils/markdown-loader';
-import { BlogPost as BlogPostType } from '@/types/blog';
+import { BlogPost as BlogPostType, TableOfContents } from '@/types/blog';
+import { motion } from 'framer-motion';
+import MarkdownComponents from './MarkdownComponents';
+import { useToast } from "@/hooks/use-toast";
+import { SEO } from './SEO';
 
-// Helper function to safely convert children to string
-const childrenToString = (children: React.ReactNode): string => {
-  if (Array.isArray(children)) {
-    return children.map(child => {
-      if (typeof child === 'string') return child;
-      if (typeof child === 'number') return child.toString();
-      return '';
-    }).join('');
-  }
-  if (typeof children === 'string') return children;
-  if (typeof children === 'number') return children.toString();
-  return '';
-};
+const Sidebar: React.FC<{
+    isOpen: boolean;
+    onToggle: () => void;
+    tocItems: TableOfContents[];
+    shareUrl: string;
+}> = ({ isOpen, onToggle, tocItems, shareUrl }) => {
+    const { toast } = useToast();
+    const [activeId, setActiveId] = useState<string>('');
 
-// Create slug from string
-const createSlug = (text: string): string => {
-  return text
-    .toLowerCase()
-    .replace(/[^a-zA-Z0-9 -]/g, '')
-    .replace(/\s+/g, '-');
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        setActiveId(entry.target.id);
+                    }
+                });
+            },
+            {
+                rootMargin: '-100px 0px -66% 0px',
+                threshold: 0.2
+            }
+        );
+
+        document.querySelectorAll('h1[id], h2[id], h3[id], h4[id]').forEach((elem) => {
+            observer.observe(elem);
+        });
+
+        return () => observer.disconnect();
+    }, [tocItems]);
+
+    const handleShare = async () => {
+        try {
+            await navigator.clipboard.writeText(shareUrl);
+            toast({
+                title: "Link copied!",
+                description: "URL copied to clipboard",
+                duration: 2000,
+            });
+        } catch (err) {
+            toast({
+                title: "Failed to copy",
+                description: "Please try again",
+                variant: "destructive",
+                duration: 2000,
+            });
+        }
+    };
+
+    return (
+        <div className="h-[calc(100vh-64px)] flex flex-col sticky top-0">
+            {/* Share button - fixed at top */}
+            <div className={`flex-none border-b border-border bg-background/95 ${isOpen ? "" : "hidden"}`}>
+                <div className="p-4">
+                    <button
+                        onClick={handleShare}
+                        className="flex w-full items-center gap-2 p-2 rounded-lg
+                               bg-primary/10 hover:bg-primary/20 transition-colors"
+                    >
+                        <LinkIcon size={16} /> Share post URL
+                    </button>
+                </div>
+            </div>
+
+            {/* Collapse button */}
+            <button
+                onClick={onToggle}
+                className="absolute right-0 top-20 -mr-8 p-1.5 rounded-l-md bg-background
+                          border border-r-0 border-border hover:bg-primary/10 transition-colors"
+                aria-label={isOpen ? "Collapse sidebar" : "Expand sidebar"}
+            >
+                {isOpen ?
+
+                    <ChevronLeftIcon size={20}
+                        className={`transition-transform duration-200 ${isOpen ? '' : 'rotate-180'}`}
+                    />
+                    :
+
+                    <ChevronRightIcon size={20}
+                        className={`transition-transform duration-200 ${isOpen ? '' : 'rotate-180'}`}
+                    />
+                }
+
+            </button>
+
+            {/* Scrollable content area */}
+            <div className={`flex-1 overflow-y-auto transition-all duration-200 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
+                <div className="p-4">
+                    {tocItems.length > 0 && (
+                        <div>
+                            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                                <ListIcon size={18} /> Contents
+                            </h3>
+                            <nav className="space-y-1">
+                                {tocItems.map((item) => (
+                                    <a
+                                        key={item.id}
+                                        href={`#${item.id}`}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            const element = document.getElementById(item.id);
+                                            if (element) {
+                                                const offset = 80;
+                                                const top = element.getBoundingClientRect().top +
+                                                    window.scrollY - offset;
+                                                window.scrollTo({ top, behavior: 'smooth' });
+                                            }
+                                        }}
+                                        className={`
+                                            block py-1.5 pl-4 -ml-px border-l
+                                            ${activeId === item.id
+                                                ? 'border-primary text-primary font-medium'
+                                                : 'border-transparent hover:border-primary/50 text-muted-foreground hover:text-foreground'
+                                            }
+                                            ${item.level === 1 ? 'text-base' : 'text-sm'}
+                                        `}
+                                        style={{ paddingLeft: `${(item.level - 0.5) * 1}rem` }}
+                                    >
+                                        {item.title}
+                                    </a>
+                                ))}
+                            </nav>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
 };
 
 export const BlogPost: React.FC = () => {
-  const { slug } = useParams<{ slug: string }>();
-  const post: BlogPostType | undefined = getPostBySlug(slug || '');
+    const [showSidebar, setShowSidebar] = useState(true);
+    const { slug } = useParams<{ slug: string }>();
+    const post = getPostBySlug(slug || '') as BlogPostType | undefined;
 
-  if (!post) {
-    return <div>Post not found</div>;
-  }
+    const toggleSidebar = () => {
+        setShowSidebar(!showSidebar);
+    };
 
-  return (
-    <Card className="max-w-4xl mx-auto bg-background/50 backdrop-blur-sm border-primary/10">
-      <CardHeader>
-        <img
-          src={post.frontmatter.image.url}
-          alt={post.frontmatter.image.alt}
-          className="w-full object-cover rounded-t-lg"
-        />
-        <CardTitle className="text-3xl font-bold mt-4 text-primary">
-          {post.frontmatter.title}
-        </CardTitle>
-        <div className="flex items-center space-x-4 mt-2">
-          <img
-            src={post.frontmatter.authorImage.url}
-            alt={post.frontmatter.authorImage.alt}
-            className="w-10 h-10 rounded-full"
-          />
-          <div>
-            <p className="font-medium">{post.frontmatter.author}</p>
-            <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-              <CalendarIcon className="w-4 h-4" />
-              <span>{new Date(post.frontmatter.pubDate).toLocaleDateString()}</span>
-              <ClockIcon className="w-4 h-4 ml-2" />
-              <span>{post.frontmatter.ttr}</span>
+    if (!post) {
+        return (
+            <div className="flex items-center justify-center h-[50vh]">
+                <p className="text-lg text-muted-foreground">Post not found</p>
             </div>
-          </div>
+        );
+    }
+
+    const formattedDate = new Date(post.frontmatter.pubDate).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+
+    return (
+
+        <div className="min-h-screen flex flex-col relative">
+            <SEO post={post} />
+            {/* Sidebar - hidden on mobile */}
+            <div className={`fixed top-0 left-0 bottom-0 bg-background/95
+                          backdrop-blur-sm border-r border-border
+                          hidden lg:block transition-all duration-200
+                          ${showSidebar ? 'w-64' : 'w-0'}`}>
+                <Sidebar
+                    isOpen={showSidebar}
+                    onToggle={toggleSidebar}
+                    tocItems={post.tableOfContents}
+                    shareUrl={window.location.href}
+                />
+            </div>
+            {/* Main content area */}
+            <main className={`flex-1 transition-all duration-200
+                            ${showSidebar ? 'lg:pl-64' : 'lg:pl-16'}`}>
+                <div className="max-w-5xl mx-auto px-4 py-8 pt-20">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                    >
+                        {/* Hero Section */}
+                        <div className="relative mb-4 rounded-xl overflow-hidden">
+                            <div className="aspect-[21/9] relative">
+                                <img
+                                    src={post.frontmatter.image.url}
+                                    alt={post.frontmatter.image.alt}
+                                    className="absolute inset-0 w-full h-full object-cover"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                            </div>
+
+                            <div className="absolute bottom-0 left-0 right-0 p-4 md:p-8">
+                                <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+                                    {post.frontmatter.title}
+                                </h1>
+                                <div className="flex flex-wrap gap-2 mb-4">
+                                    {post.frontmatter.tags.map((tag) => (
+                                        <Badge
+                                            key={tag}
+                                            variant="secondary"
+                                            className="bg-white/10 hover:bg-white/20 text-sm"
+                                        >
+                                            {tag}
+                                        </Badge>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        <Card className="bg-background/50 backdrop-blur-sm border-primary/10">
+                            <CardHeader>
+                                <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                                    <img
+                                        src={post.frontmatter.authorImage.url}
+                                        alt={post.frontmatter.authorImage.alt}
+                                        className="w-12 h-12 rounded-full ring-2 ring-primary/20"
+                                    />
+                                    <div>
+                                        <p className="font-medium text-lg">{post.frontmatter.author}</p>
+                                        <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                                            <span className="flex items-center gap-1">
+                                                <CalendarIcon className="w-4 h-4" />
+                                                {formattedDate}
+                                            </span>
+                                            <span className="flex items-center gap-1">
+                                                <ClockIcon className="w-4 h-4" />
+                                                {post.frontmatter.ttr}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </CardHeader>
+                            <CardContent>
+                                <ReactMarkdown
+                                    className="blog-post-content"
+                                    components={MarkdownComponents}
+                                >
+                                    {post.content}
+                                </ReactMarkdown>
+                            </CardContent>
+                        </Card>
+                    </motion.div>
+                </div>
+            </main>
         </div>
-        <div className="flex flex-wrap gap-2 mt-4">
-          {post.frontmatter.tags.map((tag) => (
-            <Badge key={tag} variant="secondary">{tag}</Badge>
-          ))}
-        </div>
-      </CardHeader>
-      <CardContent>
-        <ReactMarkdown
-          className="prose dark:prose-invert max-w-none blog-post-content"
-          components={{
-            h1: ({ node, children, ...props }) => {
-              const id = createSlug(childrenToString(children));
-              return <h1 id={id} {...props}>{children}</h1>;
-            },
-            h2: ({ node, children, ...props }) => {
-              const id = createSlug(childrenToString(children));
-              return <h2 id={id} {...props}>{children}</h2>;
-            },
-            h3: ({ node, children, ...props }) => {
-              const id = createSlug(childrenToString(children));
-              return <h3 id={id} {...props}>{children}</h3>;
-            },
-            h4: ({ node, children, ...props }) => {
-              const id = createSlug(childrenToString(children));
-              return <h4 id={id} {...props}>{children}</h4>;
-            },
-            a: ({ node, href, children, ...props }) => {
-              // Check if it's an internal anchor link
-              if (href?.startsWith('#')) {
-                return (
-                  <a
-                    href={href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      const element = document.getElementById(href.slice(1));
-                      if (element) {
-                        element.scrollIntoView({
-                          behavior: 'smooth',
-                          block: 'start'
-                        });
-                      }
-                    }}
-                    className="text-primary hover:text-primary/80 no-underline hover:underline"
-                    {...props}
-                  >
-                    {children}
-                  </a>
-                );
-              }
-              // External links
-              return (
-                <a
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary hover:text-primary/80 no-underline hover:underline"
-                  {...props}
-                >
-                  {children}
-                </a>
-              );
-            },
-            img: ({ node, ...props }) => (
-              <img
-                className="max-w-full h-auto rounded-lg shadow-md my-4"
-                {...props}
-              />
-            ),
-          }}
-        >
-          {post.content}
-        </ReactMarkdown>
-      </CardContent>
-    </Card>
-  );
+    );
 };

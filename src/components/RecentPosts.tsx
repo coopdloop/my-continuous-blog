@@ -14,10 +14,10 @@ export const RecentPosts: React.FC<RecentPostsProps> = ({ posts }) => {
         <div className="relative py-4">
             {/* Section Header */}
             <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-purple-400 to-amber-200">
+                <h2 className="text-3xl font-bold bg-clip-text dark:text-transparent bg-gradient-to-r from-amber-200 via-purple-400 to-amber-200">
                     Latest Insights
                 </h2>
-                <p className="text-slate-400 mt-2">
+                <p className="mt-2">
                     Explore my most recent engineering discoveries
                 </p>
             </div>
@@ -53,8 +53,8 @@ export const RecentPosts: React.FC<RecentPostsProps> = ({ posts }) => {
                             <p className="text-slate-400 text-sm line-clamp-2 mb-4">
                                 {post.frontmatter.description}
                             </p>
-                            <div className="flex flex-wrap gap-2">
-                                {post.frontmatter.tags.slice(0, 2).map(tag => (
+                            <div className="flex flex-wrap gap-1">
+                                {post.frontmatter.tags.slice(0, 4).map(tag => (
                                     <Badge
                                         key={tag}
                                         variant="secondary"

@@ -11,20 +11,6 @@ imageAlt: "The full Astro logo."
 tags: notes, efficiency, repository, information, zettelkasten, obsidian, notion, ai
 ---
 
-## Table of Contents
-
-- [Introduction](#introduction)
-  - [Lets talk methods and concepts](#lets-talk-methods-and-concepts)
-    - [Zettelkasten](#zettelkasten)
-    - [Knowledge Management System](#knowledge-management-system)
-    - [Quick formatted notes](#quick-formatted-notes-markdown)
-    - [Note taking workflows](#note-taking-workflows)
-  - [Obsidian and Notion AI workflow](#obsidian-and-notion-ai-workflow)
-  - [What's Next](#whats-next)
-  - [Inspiration and References](#inspiration-and-references)
-
----
-
 # Introduction
 
 Welcome to my second blog post! If you are reading this, thank you for taking time out of your day!
@@ -41,7 +27,6 @@ I want to talk about a great solution to this, and how you can use generative AI
 \
 As a pre-note, this blog post is non-standard for the type of posts to see on this site, however it goes over my compartmentalization of information I do on a daily basis, and how I can reproduce, recall, and generate so much code. On top of that, this system is beneficial for all my documentation efforts, Public and Private. Essentially in this information age, I need some way to hold important information so I can quickly recall it.
 
----
 
 ## Lets talk methods and concepts
 
@@ -76,8 +61,6 @@ https://help.obsidian.md/Getting+started/Download+and+install+Obsidian
 
 1. Effective note taking workflows are crucial for maximizing productivity and organizing information efficiently. A well-structured workflow involves selecting the right tools, such as note-taking apps or digital notebooks, and establishing consistent practices for capturing, categorizing, and reviewing notes. By refining your note-taking process, you can enhance your ability to retain and utilize information, leading to better decision-making and project management.
 
----
-
 ## Obsidian and Notion AI workflow
 
 1. In the integrated workflow using Notion and Obsidian, the process begins with creating a Markdown file in the Obsidian inbox.
@@ -110,7 +93,6 @@ Success! Entry added.
 1. Let's do some prompt engineering, and this will wrap up this blog post. :)
 ![obsidian actual note](https://blog-photo-bucket.s3.amazonaws.com/TheSecondBrainMethodology/second_brain_08_image.png "Obsidian actual note")
 1. Notion AI used the newly added note as context to answer the question, even providing it as a reference I can navigate to. The power of this is endless.
----
 
 ## What's Next
 

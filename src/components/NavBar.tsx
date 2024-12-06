@@ -24,7 +24,7 @@ export const NavBar: React.FC = () => {
         const handleScroll = (): void => {
             const currentScrollY = window.scrollY;
 
-            if (currentScrollY > lastScrollY && currentScrollY > 100) {
+            if (currentScrollY > 20) {
                 setIsVisible(false);
                 setIsMenuOpen(false);
             } else {
@@ -85,7 +85,7 @@ export const NavBar: React.FC = () => {
                         whileHover={{ scale: 1.05 }}
                     >
                         <Link to="/" className="text-2xl font-bold">
-                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-purple-500 to-primary">
+                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-secondary via-purple-500 to-secondary">
                                 devsec-cooper.codes
                             </span>
                         </Link>
@@ -105,7 +105,7 @@ export const NavBar: React.FC = () => {
                                 <Button
                                     variant="ghost"
                                     size="sm"
-                                    className="hover:bg-primary/10"
+                                    className="hover:bg-primary/10 text-white"
                                 >
                                     <CodeIcon className="mr-2 h-4 w-4" />
                                     Source

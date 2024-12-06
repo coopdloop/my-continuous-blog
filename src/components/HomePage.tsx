@@ -44,7 +44,7 @@ export const HomePage: React.FC = () => {
                 ))}
             </div>
 
-            <div className="px-4 pt-24 pb-16">
+            <div className="px-4 pt-14 pb-16">
                 <AnimatePresence>
                     {isVisible && (
                         <motion.div
@@ -65,7 +65,7 @@ export const HomePage: React.FC = () => {
                                             Engineering Expertise
                                         </span>
                                     </h1>
-                                    <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                                    <p className="text-lg md:text-xl  max-w-2xl mx-auto leading-relaxed">
                                         I build software at the edge of possibility.
                                         Where human ingenuity meets artificial intelligence
                                         to create systems of unprecedented capability.
@@ -80,7 +80,7 @@ export const HomePage: React.FC = () => {
                                     transition={{ delay: 0.6 }}
                                 >
                                     <div className="h-px w-16 bg-gradient-to-r from-transparent via-orange-500/50 to-transparent" />
-                                    <Star className="w-4 h-4 text-orange-500/50" />
+                                    <Star className="w-4 h-4 dark:text-orange-500/50 text-yellow-400" />
                                     <div className="h-px w-16 bg-gradient-to-r from-transparent via-orange-500/50 to-transparent" />
                                 </motion.div>
 

@@ -1,14 +1,14 @@
 ---
 title: My First Blog Post
 pubDate: 2023-09-09
-description: This is the first post of my new Astro blog.
+description: This is the first post of my blog.
 ttr: 2 min
 author: Cooper Wallace
 authorImage: "https://blog-photo-bucket.s3.amazonaws.com/high_qual_pfp_informal_cropped_circle.jpg"
 authorImageAlt: "Cooper Wallace"
 image: ""
 imageAlt: "The full Astro logo."
-tags: learning, full-stack, web-development
+tags: learning, web-development
 projectLink: "https://github.com/coopdloop/Astro-Blog"
 ---
 

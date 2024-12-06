@@ -201,17 +201,17 @@ export const PostsPage: React.FC = () => {
                             Engineering Insights
                         </h1>
                     </div>
-                    <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+                    <p className="text-lg max-w-2xl mx-auto">
                         Explore the intersection of innovation and engineering excellence
                     </p>
                     <div className="flex justify-center gap-8 text-slate-300">
                         <div>
                             <span className="text-xl font-bold text-amber-400">{posts.length}</span>
-                            <p className="text-sm text-slate-400">Articles</p>
+                            <p className="text-sm">Articles</p>
                         </div>
                         <div>
                             <span className="text-xl font-bold text-amber-400">{allTags.length}</span>
-                            <p className="text-sm text-slate-400">Topics</p>
+                            <p className="text-sm">Topics</p>
                         </div>
                     </div>
                 </motion.div>
@@ -335,7 +335,7 @@ export const PostsPage: React.FC = () => {
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="text-slate-400 mb-6"
+                    className="mb-6"
                 >
                     Found {filteredPosts.length} {filteredPosts.length === 1 ? 'article' : 'articles'}
                     {(filters.tags.length > 0 || filters.search) && ' matching your criteria'}
