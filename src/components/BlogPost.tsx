@@ -10,6 +10,7 @@ import { motion } from 'framer-motion';
 import MarkdownComponents from './MarkdownComponents';
 import { useToast } from "@/hooks/use-toast";
 import { SEO } from './SEO';
+import PageTemplate from '@/PageTemplate';
 
 const Sidebar: React.FC<{
     isOpen: boolean;
@@ -146,6 +147,8 @@ export const BlogPost: React.FC = () => {
     const { slug } = useParams<{ slug: string }>();
     const post = getPostBySlug(slug || '') as BlogPostType | undefined;
 
+
+
     const toggleSidebar = () => {
         setShowSidebar(!showSidebar);
     };
@@ -164,10 +167,19 @@ export const BlogPost: React.FC = () => {
         day: 'numeric'
     });
 
+
+    const pageMetadata = {
+        title: post.frontmatter.title,
+        description: post.frontmatter.description,
+        ogImage: post.frontmatter.image.url,
+        ogType: 'article',
+    };
+
     return (
 
         <div className="min-h-screen flex flex-col relative">
             <SEO post={post} />
+            <PageTemplate {...pageMetadata} />
             {/* Sidebar - hidden on mobile */}
             <div className={`fixed top-0 left-0 bottom-0 bg-background/95
                           backdrop-blur-sm border-r border-border

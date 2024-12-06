@@ -9,7 +9,7 @@ const RSSFeedPage: React.FC = () => {
         <head>
           <title>Engineering Insights RSS Feed</title>
           <meta charSet="UTF-8" />
-          <link rel="alternate" type="application/rss+xml" href="/api/rss" />
+          <link rel="alternate" type="application/rss+xml" href="/rss.xml" />
         </head>
         <body>
           <pre>{rssXml}</pre>
