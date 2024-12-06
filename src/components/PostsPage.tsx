@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { BlogPost } from '@/types/blog';
 import { getAllPosts } from '@/utils/markdown-loader';
+import { SEO } from './SEO';
 
 interface FilterState {
     tags: string[];
@@ -187,185 +188,191 @@ export const PostsPage: React.FC = () => {
     );
 
     return (
-        <div className="min-h-screen relative">
-            {/* Header Section */}
-            <div className="relative mb-10">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="container mx-auto px-4 pt-4 text-center space-y-2"
-                >
-                    <div className="flex items-center justify-center gap-2 mb-4">
-                        <SparklesIcon className="h-8 w-8 text-amber-400" />
-                        <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-purple-400 to-amber-200">
-                            Engineering Insights
-                        </h1>
-                    </div>
-                    <p className="text-lg max-w-2xl mx-auto">
-                        Explore the intersection of innovation and engineering excellence
-                    </p>
-                    <div className="flex justify-center gap-8 text-slate-300">
-                        <div>
-                            <span className="text-xl font-bold text-amber-400">{posts.length}</span>
-                            <p className="text-sm">Articles</p>
+        <>
+            <SEO
+                title="Engineering Insights"
+                description="Explore the intersection of innovation and engineering excellence"
+            />
+            <div className="min-h-screen relative">
+                {/* Header Section */}
+                <div className="relative mb-10">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="container mx-auto px-4 pt-4 text-center space-y-2"
+                    >
+                        <div className="flex items-center justify-center gap-2 mb-4">
+                            <SparklesIcon className="h-8 w-8 text-amber-400" />
+                            <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-purple-400 to-amber-200">
+                                Engineering Insights
+                            </h1>
                         </div>
-                        <div>
-                            <span className="text-xl font-bold text-amber-400">{allTags.length}</span>
-                            <p className="text-sm">Topics</p>
-                        </div>
-                    </div>
-                </motion.div>
-            </div>
-
-            {/* Enhanced Search and Filter Bar */}
-            <div className="container mx-auto px-4">
-                <motion.div
-                    className="relative z-10 mb-8"
-                    layout
-                >
-                    <div className="bg-slate-900/50 backdrop-blur-lg rounded-lg border border-amber-500/20 p-6">
-                        {/* Search Bar */}
-                        <div className="flex flex-col md:flex-row gap-4 mb-4">
-                            <div className="relative flex-grow">
-                                <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-500/50" />
-                                <Input
-                                    type="text"
-                                    placeholder="Search articles..."
-                                    value={filters.search}
-                                    onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-                                    className="pl-10 h-12 bg-slate-800/50 border-amber-500/20 focus:border-amber-500/50"
-                                />
+                        <p className="text-lg max-w-2xl mx-auto">
+                            Explore the intersection of innovation and engineering excellence
+                        </p>
+                        <div className="flex justify-center gap-8 text-slate-300">
+                            <div>
+                                <span className="text-xl font-bold text-amber-400">{posts.length}</span>
+                                <p className="text-sm">Articles</p>
                             </div>
-                            <Button
-                                variant="outline"
-                                className="h-12 border-amber-500/20 hover:bg-amber-500/10"
-                                onClick={() => setShowTagPanel(!showTagPanel)}
-                            >
-                                <TagIcon className="mr-2 h-4 w-4" />
-                                Filter by Tags ({filters.tags.length})
-                            </Button>
+                            <div>
+                                <span className="text-xl font-bold text-amber-400">{allTags.length}</span>
+                                <p className="text-sm">Topics</p>
+                            </div>
                         </div>
+                    </motion.div>
+                </div>
 
-                        {/* Popular Tags */}
-                        <div className="flex flex-wrap gap-2">
-                            {Array.from(tagStats)
-                                .sort((a, b) => b[1] - a[1])
-                                .slice(0, 8)
-                                .map(([tag, count]) => (
-                                    <Badge
-                                        key={tag}
-                                        variant="secondary"
-                                        className={`cursor-pointer transition-all ${filters.tags.includes(tag)
-                                            ? "bg-amber-500 text-slate-900"
-                                            : "bg-amber-500/10 text-amber-300 hover:bg-amber-500/20"
-                                            }`}
-                                        onClick={() => {
-                                            filters.tags.includes(tag)
-                                                ? handleTagRemove(tag)
-                                                : handleTagSelect(tag);
-                                        }}
-                                    >
-                                        {tag} ({count})
-                                    </Badge>
-                                ))}
-                        </div>
-
-                        {/* Tag Panel */}
-                        <AnimatePresence>
-                            {showTagPanel && (
-                                <TagPanel
-                                    allTags={allTags}
-                                    selectedTags={filters.tags}
-                                    onTagSelect={handleTagSelect}
-                                    onTagRemove={handleTagRemove}
-                                />
-                            )}
-                        </AnimatePresence>
-
-                        {/* Active Filters */}
-                        <AnimatePresence>
-                            {(filters.tags.length > 0 || filters.search) && (
-                                <motion.div
-                                    initial={{ height: 0, opacity: 0 }}
-                                    animate={{ height: 'auto', opacity: 1 }}
-                                    exit={{ height: 0, opacity: 0 }}
-                                    className="mt-4 flex items-center gap-2 flex-wrap"
+                {/* Enhanced Search and Filter Bar */}
+                <div className="container mx-auto px-4">
+                    <motion.div
+                        className="relative z-10 mb-8"
+                        layout
+                    >
+                        <div className="bg-slate-900/50 backdrop-blur-lg rounded-lg border border-amber-500/20 p-6">
+                            {/* Search Bar */}
+                            <div className="flex flex-col md:flex-row gap-4 mb-4">
+                                <div className="relative flex-grow">
+                                    <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-500/50" />
+                                    <Input
+                                        type="text"
+                                        placeholder="Search articles..."
+                                        value={filters.search}
+                                        onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+                                        className="pl-10 h-12 bg-slate-800/50 border-amber-500/20 focus:border-amber-500/50"
+                                    />
+                                </div>
+                                <Button
+                                    variant="outline"
+                                    className="h-12 border-amber-500/20 hover:bg-amber-500/10"
+                                    onClick={() => setShowTagPanel(!showTagPanel)}
                                 >
-                                    <span className="text-sm text-slate-400">Active filters:</span>
-                                    {filters.tags.map(tag => (
+                                    <TagIcon className="mr-2 h-4 w-4" />
+                                    Filter by Tags ({filters.tags.length})
+                                </Button>
+                            </div>
+
+                            {/* Popular Tags */}
+                            <div className="flex flex-wrap gap-2">
+                                {Array.from(tagStats)
+                                    .sort((a, b) => b[1] - a[1])
+                                    .slice(0, 8)
+                                    .map(([tag, count]) => (
                                         <Badge
                                             key={tag}
                                             variant="secondary"
-                                            className="bg-amber-500/10 text-amber-300"
+                                            className={`cursor-pointer transition-all ${filters.tags.includes(tag)
+                                                ? "bg-amber-500 text-slate-900"
+                                                : "bg-amber-500/10 text-amber-300 hover:bg-amber-500/20"
+                                                }`}
+                                            onClick={() => {
+                                                filters.tags.includes(tag)
+                                                    ? handleTagRemove(tag)
+                                                    : handleTagSelect(tag);
+                                            }}
                                         >
-                                            {tag}
-                                            <XIcon
-                                                className="ml-2 h-3 w-3 cursor-pointer"
-                                                onClick={() => handleTagRemove(tag)}
-                                            />
+                                            {tag} ({count})
                                         </Badge>
                                     ))}
-                                    {filters.search && (
-                                        <Badge
-                                            variant="secondary"
-                                            className="bg-amber-500/10 text-amber-300"
-                                        >
-                                            "{filters.search}"
-                                            <XIcon
-                                                className="ml-2 h-3 w-3 cursor-pointer"
-                                                onClick={() => setFilters({ ...filters, search: '' })}
-                                            />
-                                        </Badge>
-                                    )}
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        onClick={() => setFilters({ tags: [], search: '' })}
-                                        className="text-slate-400 hover:text-amber-300"
+                            </div>
+
+                            {/* Tag Panel */}
+                            <AnimatePresence>
+                                {showTagPanel && (
+                                    <TagPanel
+                                        allTags={allTags}
+                                        selectedTags={filters.tags}
+                                        onTagSelect={handleTagSelect}
+                                        onTagRemove={handleTagRemove}
+                                    />
+                                )}
+                            </AnimatePresence>
+
+                            {/* Active Filters */}
+                            <AnimatePresence>
+                                {(filters.tags.length > 0 || filters.search) && (
+                                    <motion.div
+                                        initial={{ height: 0, opacity: 0 }}
+                                        animate={{ height: 'auto', opacity: 1 }}
+                                        exit={{ height: 0, opacity: 0 }}
+                                        className="mt-4 flex items-center gap-2 flex-wrap"
                                     >
-                                        Clear all
-                                    </Button>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
-                    </div>
-                </motion.div>
+                                        <span className="text-sm text-slate-400">Active filters:</span>
+                                        {filters.tags.map(tag => (
+                                            <Badge
+                                                key={tag}
+                                                variant="secondary"
+                                                className="bg-amber-500/10 text-amber-300"
+                                            >
+                                                {tag}
+                                                <XIcon
+                                                    className="ml-2 h-3 w-3 cursor-pointer"
+                                                    onClick={() => handleTagRemove(tag)}
+                                                />
+                                            </Badge>
+                                        ))}
+                                        {filters.search && (
+                                            <Badge
+                                                variant="secondary"
+                                                className="bg-amber-500/10 text-amber-300"
+                                            >
+                                                "{filters.search}"
+                                                <XIcon
+                                                    className="ml-2 h-3 w-3 cursor-pointer"
+                                                    onClick={() => setFilters({ ...filters, search: '' })}
+                                                />
+                                            </Badge>
+                                        )}
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            onClick={() => setFilters({ tags: [], search: '' })}
+                                            className="text-slate-400 hover:text-amber-300"
+                                        >
+                                            Clear all
+                                        </Button>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </div>
+                    </motion.div>
 
-                {/* Results Count */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="mb-6"
-                >
-                    Found {filteredPosts.length} {filteredPosts.length === 1 ? 'article' : 'articles'}
-                    {(filters.tags.length > 0 || filters.search) && ' matching your criteria'}
-                </motion.div>
-
-                {/* Posts Grid */}
-                <motion.div
-                    layout
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-                >
-                    <AnimatePresence mode="popLayout">
-                        {filteredPosts.map((post) => (
-                            <PostCard key={post.slug} post={post} />
-                        ))}
-                    </AnimatePresence>
-                </motion.div>
-
-                {/* No Results Message */}
-                {filteredPosts.length === 0 && (
+                    {/* Results Count */}
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="text-center py-12"
+                        className="text-slate-400 mb-6"
                     >
-                        <BookOpenIcon className="mx-auto h-12 w-12 text-slate-500" />
-                        <h3 className="mt-4 text-lg font-medium text-slate-300">No posts found</h3>
-                        <p className="mt-2 text-slate-400">Try adjusting your search or filter criteria</p>
+                        Found {filteredPosts.length} {filteredPosts.length === 1 ? 'article' : 'articles'}
+                        {(filters.tags.length > 0 || filters.search) && ' matching your criteria'}
                     </motion.div>
-                )}
+
+                    {/* Posts Grid */}
+                    <motion.div
+                        layout
+                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                    >
+                        <AnimatePresence mode="popLayout">
+                            {filteredPosts.map((post) => (
+                                <PostCard key={post.slug} post={post} />
+                            ))}
+                        </AnimatePresence>
+                    </motion.div>
+
+                    {/* No Results Message */}
+                    {filteredPosts.length === 0 && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="text-center py-12"
+                        >
+                            <BookOpenIcon className="mx-auto h-12 w-12 text-slate-500" />
+                            <h3 className="mt-4 text-lg font-medium text-slate-300">No posts found</h3>
+                            <p className="mt-2 text-slate-400">Try adjusting your search or filter criteria</p>
+                        </motion.div>
+                    )}
+                </div>
             </div>
-        </div>
+        </>
     );
 };

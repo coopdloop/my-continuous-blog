@@ -53,7 +53,7 @@ export const RecentPosts: React.FC<RecentPostsProps> = ({ posts }) => {
                             <p className="text-slate-400 text-sm line-clamp-2 mb-4">
                                 {post.frontmatter.description}
                             </p>
-                            <div className="flex flex-wrap gap-1">
+                            <div className="flex flex-wrap gap-2">
                                 {post.frontmatter.tags.slice(0, 4).map(tag => (
                                     <Badge
                                         key={tag}

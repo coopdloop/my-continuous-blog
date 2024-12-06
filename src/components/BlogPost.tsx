@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -10,7 +10,6 @@ import { motion } from 'framer-motion';
 import MarkdownComponents from './MarkdownComponents';
 import { useToast } from "@/hooks/use-toast";
 import { SEO } from './SEO';
-import PageTemplate from '@/PageTemplate';
 
 const Sidebar: React.FC<{
     isOpen: boolean;
@@ -146,7 +145,7 @@ export const BlogPost: React.FC = () => {
     const [showSidebar, setShowSidebar] = useState(true);
     const { slug } = useParams<{ slug: string }>();
     const post = getPostBySlug(slug || '') as BlogPostType | undefined;
-
+    const location = useLocation();
 
 
     const toggleSidebar = () => {
@@ -168,103 +167,112 @@ export const BlogPost: React.FC = () => {
     });
 
 
-    const pageMetadata = {
-        title: post.frontmatter.title,
-        description: post.frontmatter.description,
-        ogImage: post.frontmatter.image.url,
-        ogType: 'article',
-    };
+    useEffect(() => {
+        if (post) {
+            document.title = `${post.frontmatter.title} | Cooper Wallace Blog`;
+            document.querySelector('meta[name="description"]')?.setAttribute('content', post.frontmatter.description);
+            document.querySelector('meta[property="og:title"]')?.setAttribute('content', post.frontmatter.title);
+            document.querySelector('meta[property="og:description"]')?.setAttribute('content', post.frontmatter.description);
+            document.querySelector('meta[property="og:image"]')?.setAttribute('content', post.frontmatter.image.url);
+        }
+    }, [post, location]);
 
     return (
-
-        <div className="min-h-screen flex flex-col relative">
-            <SEO post={post} />
-            <PageTemplate {...pageMetadata} />
-            {/* Sidebar - hidden on mobile */}
-            <div className={`fixed top-0 left-0 bottom-0 bg-background/95
+        <>
+            <SEO
+                title={post.frontmatter.title}
+                description={post.frontmatter.description}
+                image={post.frontmatter.image.url}
+                article={true}
+                slug={post.slug}
+            />
+            <div className="min-h-screen flex flex-col relative">
+                {/* Sidebar - hidden on mobile */}
+                <div className={`fixed top-0 left-0 bottom-0 bg-background/95
                           backdrop-blur-sm border-r border-border
                           hidden lg:block transition-all duration-200
                           ${showSidebar ? 'w-64' : 'w-0'}`}>
-                <Sidebar
-                    isOpen={showSidebar}
-                    onToggle={toggleSidebar}
-                    tocItems={post.tableOfContents}
-                    shareUrl={window.location.href}
-                />
-            </div>
-            {/* Main content area */}
-            <main className={`flex-1 transition-all duration-200
+                    <Sidebar
+                        isOpen={showSidebar}
+                        onToggle={toggleSidebar}
+                        tocItems={post.tableOfContents}
+                        shareUrl={window.location.href}
+                    />
+                </div>
+                {/* Main content area */}
+                <main className={`flex-1 transition-all duration-200
                             ${showSidebar ? 'lg:pl-64' : 'lg:pl-16'}`}>
-                <div className="max-w-5xl mx-auto px-4 py-8 pt-20">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                    >
-                        {/* Hero Section */}
-                        <div className="relative mb-4 rounded-xl overflow-hidden">
-                            <div className="aspect-[21/9] relative">
-                                <img
-                                    src={post.frontmatter.image.url}
-                                    alt={post.frontmatter.image.alt}
-                                    className="absolute inset-0 w-full h-full object-cover"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                            </div>
-
-                            <div className="absolute bottom-0 left-0 right-0 p-4 md:p-8">
-                                <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
-                                    {post.frontmatter.title}
-                                </h1>
-                                <div className="flex flex-wrap gap-2 mb-4">
-                                    {post.frontmatter.tags.map((tag) => (
-                                        <Badge
-                                            key={tag}
-                                            variant="secondary"
-                                            className="bg-white/10 hover:bg-white/20 text-sm"
-                                        >
-                                            {tag}
-                                        </Badge>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-
-                        <Card className="bg-background/50 backdrop-blur-sm border-primary/10">
-                            <CardHeader>
-                                <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                    <div className="max-w-5xl mx-auto px-4 py-8 pt-20">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
+                        >
+                            {/* Hero Section */}
+                            <div className="relative mb-4 rounded-xl overflow-hidden">
+                                <div className="aspect-[21/9] relative">
                                     <img
-                                        src={post.frontmatter.authorImage.url}
-                                        alt={post.frontmatter.authorImage.alt}
-                                        className="w-12 h-12 rounded-full ring-2 ring-primary/20"
+                                        src={post.frontmatter.image.url}
+                                        alt={post.frontmatter.image.alt}
+                                        className="absolute inset-0 w-full h-full object-cover"
                                     />
-                                    <div>
-                                        <p className="font-medium text-lg">{post.frontmatter.author}</p>
-                                        <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                                            <span className="flex items-center gap-1">
-                                                <CalendarIcon className="w-4 h-4" />
-                                                {formattedDate}
-                                            </span>
-                                            <span className="flex items-center gap-1">
-                                                <ClockIcon className="w-4 h-4" />
-                                                {post.frontmatter.ttr}
-                                            </span>
-                                        </div>
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                                </div>
+
+                                <div className="absolute bottom-0 left-0 right-0 p-4 md:p-8">
+                                    <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+                                        {post.frontmatter.title}
+                                    </h1>
+                                    <div className="flex flex-wrap gap-2 mb-4">
+                                        {post.frontmatter.tags.map((tag) => (
+                                            <Badge
+                                                key={tag}
+                                                variant="secondary"
+                                                className="bg-white/10 hover:bg-white/20 text-sm"
+                                            >
+                                                {tag}
+                                            </Badge>
+                                        ))}
                                     </div>
                                 </div>
-                            </CardHeader>
-                            <CardContent>
-                                <ReactMarkdown
-                                    className="blog-post-content"
-                                    components={MarkdownComponents}
-                                >
-                                    {post.content}
-                                </ReactMarkdown>
-                            </CardContent>
-                        </Card>
-                    </motion.div>
-                </div>
-            </main>
-        </div>
+                            </div>
+
+                            <Card className="bg-background/50 backdrop-blur-sm border-primary/10">
+                                <CardHeader>
+                                    <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                                        <img
+                                            src={post.frontmatter.authorImage.url}
+                                            alt={post.frontmatter.authorImage.alt}
+                                            className="w-12 h-12 rounded-full ring-2 ring-primary/20"
+                                        />
+                                        <div>
+                                            <p className="font-medium text-lg">{post.frontmatter.author}</p>
+                                            <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                                                <span className="flex items-center gap-1">
+                                                    <CalendarIcon className="w-4 h-4" />
+                                                    {formattedDate}
+                                                </span>
+                                                <span className="flex items-center gap-1">
+                                                    <ClockIcon className="w-4 h-4" />
+                                                    {post.frontmatter.ttr}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </CardHeader>
+                                <CardContent>
+                                    <ReactMarkdown
+                                        className="blog-post-content"
+                                        components={MarkdownComponents}
+                                    >
+                                        {post.content}
+                                    </ReactMarkdown>
+                                </CardContent>
+                            </Card>
+                        </motion.div>
+                    </div>
+                </main>
+            </div>
+        </>
     );
 };

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
-import { HomeIcon, InfoIcon, CodeIcon, MenuIcon, XIcon, BookOpenIcon } from 'lucide-react';
+import { HomeIcon, InfoIcon, CodeIcon, MenuIcon, XIcon, BookOpenIcon, RssIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface NavLinkProps {
@@ -78,7 +78,9 @@ export const NavBar: React.FC = () => {
             animate={{ y: isVisible ? 0 : -100 }}
             transition={{ duration: 0.3 }}
         >
+
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
                 <div className="flex items-center justify-between h-16">
                     <motion.div
                         className="flex items-center"
@@ -115,6 +117,10 @@ export const NavBar: React.FC = () => {
                         <motion.div whileHover={{ scale: 1.05 }}>
                             <ModeToggle />
                         </motion.div>
+
+                        <Link to="/rss.xml" className="items-center text-amber-400 hover:text-amber-300">
+                            <RssIcon className="h-4 w-4" />
+                        </Link>
                     </div>
 
                     {/* Mobile Menu Button */}

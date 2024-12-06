@@ -1,26 +1,66 @@
-import React from 'react';
-import { BlogPost as BlogPostType } from '@/types/blog';
+// src/components/SEO.tsx
+import { Helmet } from 'react-helmet-async';
 
 interface SEOProps {
-  post: BlogPostType;
+  title: string;
+  description: string;
+  image?: string;
+  article?: boolean;
+  slug?: string;
 }
 
-export const SEO: React.FC<SEOProps> = ({ post }) => {
-  const url = `${window.location.origin}/post/${post.slug}`;
+export const SEO: React.FC<SEOProps> = ({
+  title,
+  description,
+  image = '/default-og-image.jpg',
+  article = false,
+  slug = ''
+}) => {
+  const siteUrl = import.meta.env.VITE_SITE_URL || 'https://yourblog.com';
+  const siteTitle = 'Cooper Wallace Blog';
+  const twitterHandle = '@yourhandle';
 
   return (
-    <>
-      <title>{post.frontmatter.title}</title>
-      <meta name="description" content={post.frontmatter.description} />
-      <meta property="og:url" content={url} />
-      <meta property="og:type" content="article" />
-      <meta property="og:title" content={post.frontmatter.title} />
-      <meta property="og:description" content={post.frontmatter.description} />
-      <meta property="og:image" content={post.frontmatter.image.url} />
+    <Helmet>
+      {/* Basic */}
+      <title>{`${title} | ${siteTitle}`}</title>
+      <meta name="description" content={description} />
+
+      {/* Open Graph */}
+      <meta property="og:site_name" content={siteTitle} />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:image" content={`${siteUrl}${image}`} />
+      <meta property="og:url" content={`${siteUrl}${slug ? `/post/${slug}` : ''}`} />
+      <meta property="og:type" content={article ? 'article' : 'website'} />
+
+      {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={post.frontmatter.title} />
-      <meta name="twitter:description" content={post.frontmatter.description} />
-      <meta name="twitter:image" content={post.frontmatter.image.url} />
-    </>
+      <meta name="twitter:creator" content={twitterHandle} />
+      <meta name="twitter:title" content={title} />
+      <meta name="twitter:description" content={description} />
+      <meta name="twitter:image" content={`${siteUrl}${image}`} />
+
+      {/* Additional for blog posts */}
+      {article && (
+        <>
+          <link rel="canonical" href={`${siteUrl}/post/${slug}`} />
+          <script type="application/ld+json">
+            {JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BlogPosting",
+              "headline": title,
+              "image": [`${siteUrl}${image}`],
+              "url": `${siteUrl}/post/${slug}`,
+              "description": description,
+              "author": {
+                "@type": "Person",
+                "name": "Cooper Wallace"
+              }
+            })}
+          </script>
+        </>
+      )}
+    </Helmet>
   );
 };

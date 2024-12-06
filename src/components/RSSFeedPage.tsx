@@ -1,22 +1,27 @@
-import { getRSSFeed } from "@/api/rss";
+// src/components/RSSFeedPage.tsx
+import { useEffect } from 'react';
+import { getAllPosts } from '@/utils/markdown-loader';
+import { generateRSSFeed } from '@/utils/rss-generator';
 
-const RSSFeedPage: React.FC = () => {
-  const rssXml = getRSSFeed();
+export const RSSFeedPage: React.FC = () => {
+  useEffect(() => {
+    const posts = getAllPosts();
+    const rssFeed = generateRSSFeed(posts);
 
-  return (
-    <>
-      <html>
-        <head>
-          <title>Engineering Insights RSS Feed</title>
-          <meta charSet="UTF-8" />
-          <link rel="alternate" type="application/rss+xml" href="/rss.xml" />
-        </head>
-        <body>
-          <pre>{rssXml}</pre>
-        </body>
-      </html>
-    </>
-  );
+    // Set content type header
+    new Response(rssFeed, {
+      headers: { 'Content-Type': 'application/xml' },
+    });
+
+    // Download as file
+    const blob = new Blob([rssFeed], { type: 'application/xml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'rss.xml';
+    a.click();
+    URL.revokeObjectURL(url);
+  }, []);
+
+  return null;
 };
-
-export default RSSFeedPage;
