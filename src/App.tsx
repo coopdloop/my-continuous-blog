@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import { ThemeProvider } from "@/components/theme-provider";
 import { NavBar } from '@/components/NavBar';
 import { HomePage } from '@/components/HomePage';
@@ -11,6 +11,41 @@ import EnhancedBackground from './components/EnhancedBackground';
 import { Toaster } from './components/ui/toaster';
 import { HelmetProvider } from 'react-helmet-async';
 import { RSSFeedPage } from './components/RSSFeedPage';
+
+// Not Found Page Component
+const NotFoundPage: React.FC = () => (
+    <div className="flex flex-col items-center justify-center min-h-[70vh] px-4">
+        <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="text-center"
+        >
+            <h1 className="text-6xl font-bold text-amber-500 mb-4">404</h1>
+            <h2 className="text-2xl font-semibold text-slate-200 mb-4">Page Not Found</h2>
+            <p className="text-slate-400 mb-8">Oops! The page you're looking for doesn't exist.</p>
+            <motion.a
+                href="/"
+                className="inline-block px-6 py-3 rounded-lg bg-amber-500 text-slate-900 font-medium hover:bg-amber-400 transition-colors"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+            >
+                Return Home
+            </motion.a>
+        </motion.div>
+    </div>
+);
+
+// Scroll to top component
+const ScrollToTop: React.FC = () => {
+    const { pathname } = useLocation();
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [pathname]);
+
+    return null;
+};
 
 interface PageTransitionProps {
     children: React.ReactNode;
@@ -53,6 +88,7 @@ const App: React.FC = () => {
             <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
                 <Router>
                     <div className="flex flex-col min-h-screen">
+                        <ScrollToTop />
 
                         <EnhancedBackground />
 
@@ -89,6 +125,12 @@ const App: React.FC = () => {
                                     </PageTransition>
                                 } />
                                 <Route path="/rss.xml" element={<RSSFeedPage />} />
+                                {/* 404 catch-all route */}
+                                <Route path="*" element={
+                                    <PageTransition>
+                                        <NotFoundPage />
+                                    </PageTransition>
+                                } />
                             </Routes>
                         </AnimatePresence>
                         <Toaster />

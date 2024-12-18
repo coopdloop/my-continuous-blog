@@ -280,7 +280,7 @@ jobs:
 Your network architecture should look like this:
 
 
-![alt](/public/mmc_step_4.png)
+![alt](/mmc_step_4.png)
 
 ### 4a- Implementation
 
@@ -649,7 +649,7 @@ This is a simple troubleshooting guide. These are some basic troubleshooting com
 
 #### OIDC Authentication Failures
 
-![alt](/public/mmc_step_11.png)
+![alt](/mmc_step_11.png)
 
 ##### Debug script for OIDC
 ```bash
@@ -715,7 +715,7 @@ The dashboard provides two critical views:
 - **Security Findings:** Tracks CRITICAL and HIGH severity issues from SecurityHub
 - **Container Health:** Monitors resource utilization to detect potential security anomalies
 
-![alt](/public/mmc_step_12.png)
+![alt](/mmc_step_12.png)
 
 #### 12a Implementation
 
@@ -810,7 +810,7 @@ Immediate team notification for high-priority issues
 
 Below shows the scale factor in using AWS managed clusters -> ECS. This is a solid tool for quick application environments needing highly configurable scalable infrastructure, without subjecting to EKS or self-managed kubernetes.
 
-![alt](/public/mmc_step_13.png)
+![alt](/mmc_step_13.png)
 
 #### Implementation
 ```hcl
@@ -854,7 +854,7 @@ Now comes looking at more layers of our vpc configuration defense, specifically 
 
 A good translation of the marketing term is this: Zero Trust architecture treats every request as potentially malicious, requiring continuous validation regardless of source. This means every container, service, and user must be authenticated and authorized for each action - even within our 'trusted' network.
 
-![alt](/public/mmc_step_14.png)
+![alt](/mmc_step_14.png)
 
 #### 14a Implementation
 
