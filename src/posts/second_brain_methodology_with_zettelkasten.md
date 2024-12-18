@@ -50,7 +50,7 @@ https://help.obsidian.md/Plugins/Graph+view
  "Obsidian Node map")
 Here is a link to get Obsidian, and try the UI out:
 
-https://help.obsidian.md/Getting+started/Download+and+install+Obsidian
+[Download Obsidian](https://help.obsidian.md/Getting+started/Download+and+install+Obsidian)
 
 
 ### Quick formatted notes (Markdown)

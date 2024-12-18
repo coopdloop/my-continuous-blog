@@ -184,7 +184,7 @@ control:
 nodes:
 
 1. Download k8s binaries
-2. Setup containerd https://github.com/containerd/containerd/blob/main/docs/getting-started.md
+2. Setup [containerd](https://github.com/containerd/containerd/blob/main/docs/getting-started.md)
 3. Configure and start the kubelet
 
 
@@ -245,6 +245,6 @@ Keep following my posts and I will do a deep dive into building infrastructure a
 
 ## Resources and links
 
-- https://github.com/kelseyhightower/kubernetes-the-hard-way
-- https://github.com/niwoerner/k8s-the-hard-way-2024
-- https://kubernetes.io/docs/concepts/overview/components/
+- [kelsey hightower kubernetes-the-hard-way](https://github.com/kelseyhightower/kubernetes-the-hard-way)
+- [niwoerner k8s the hard way](https://github.com/niwoerner/k8s-the-hard-way-2024)
+- [kubernetes docs](https://kubernetes.io/docs/concepts/overview/components/)
