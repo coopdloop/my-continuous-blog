@@ -141,22 +141,6 @@ resource "aws_iam_role_policy" "security_hub_access" {
     ]
   })
 }
-
-#~ Make sure Security Hub is enabled
-resource "aws_securityhub_account" "main" {}
-
-#~ Enable Aqua Security integration
-resource "aws_securityhub_product_subscription" "aqua" {
-  depends_on  = [aws_securityhub_account.main]
-  product_arn = "arn:aws:securityhub:${data.aws_region.current.name}::product/aquasecurity/aquasecurity"
-}
-
-#~ Enable some Compliance Standards
-resource "aws_securityhub_standards_subscription" "aws_foundation" {
-  depends_on    = [aws_securityhub_account.main]
-  standards_arn = "arn:aws:securityhub:${data.aws_region.current.name}::standards/aws-foundational-security-best-practices/v/1.0.0"
-}
-
 ```
 
 ## Step 3: Setting Up Security Scanning
@@ -285,23 +269,95 @@ Your network architecture should look like this:
 ### 4a- Implementation
 
 ```hcl
+#~ VPC and Network Configuration
+resource "aws_vpc" "main" {
+  cidr_block           = "10.0.0.0/16"
+  enable_dns_hostnames = true
+  enable_dns_support   = true
+
+  tags = {
+    Name = "main"
+  }
+}
+
+resource "aws_subnet" "public_1" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.1.0/24"
+  availability_zone = "us-east-1a"
+
+  tags = {
+    Name = "Public Subnet 1"
+  }
+}
+
+#~ Security Group
+resource "aws_security_group" "ecs_tasks" {
+  name        = "ecs-tasks-sg"
+  description = "Allow inbound traffic for ECS tasks"
+  vpc_id      = aws_vpc.main.id
+
+  ingress {
+    protocol    = "tcp"
+    from_port   = 80
+    to_port     = 80
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+#~ ECR Repository
+resource "aws_ecr_repository" "demo_app" {
+  name                 = "demo-app"
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
+
+#~ Example ECS Task Definition in our awsvpc
 resource "aws_ecs_task_definition" "app" {
-  family                   = "app"
+  family                   = "demo-app"
   requires_compatibilities = ["FARGATE"]
-  network_mode            = "awsvpc"
-  cpu                     = 256
-  memory                  = 512
-  execution_role_arn      = aws_iam_role.ecs_execution.arn
+  network_mode             = "awsvpc"
+  cpu                      = 256
+  memory                   = 512
+  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
 
   container_definitions = jsonencode([
     {
-      name  = "app"
-      image = "${aws_ecr_repository.app.repository_url}:latest"
-      readonlyRootFilesystem = true
-      privileged             = false
-      user                   = "1000:1000"
+      name  = "demo-app"
+      image = "${aws_ecr_repository.demo_app.repository_url}:latest"
+      portMappings = [
+        {
+          containerPort = 80
+          hostPort      = 80
+          protocol      = "tcp"
+        }
+      ]
     }
   ])
+}
+
+#~ ECS Service , Note: This is a public facing application
+resource "aws_ecs_service" "main" {
+  name            = "demo-service"
+  cluster         = aws_ecs_cluster.main.id
+  task_definition = aws_ecs_task_definition.app.arn
+  desired_count   = 1
+  launch_type     = "FARGATE"
+
+  network_configuration {
+    subnets          = [aws_subnet.public_1.id]
+    security_groups  = [aws_security_group.ecs_tasks.id]
+    assign_public_ip = true
+  }
 }
 ```
 
