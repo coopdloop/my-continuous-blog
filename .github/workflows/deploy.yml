@@ -50,11 +50,23 @@ jobs:
       - name: Install modules
         run: npm install
 
-      - name: Build application
-        run: npm run build
+      # - name: Build application
+      #   run: npm run build
+      #
+      # - name: Deploy to S3
+      #   run: aws s3 sync --delete ./dist/ s3://${{ secrets.BUCKET_ID }}
 
+      - name: Build application
+        run: |
+          npm run build
+          npm run preview &
+          sleep 5
+          npm run generate-static
+          kill $(lsof -t -i:4173)
       - name: Deploy to S3
-        run: aws s3 sync --delete ./dist/ s3://${{ secrets.BUCKET_ID }}
+        run: |
+          aws s3 sync --delete ./dist/ s3://${{ secrets.BUCKET_ID }}
+          aws s3 cp --recursive ./dist/static/ s3://${{ secrets.BUCKET_ID }}/static/
 
       - name: Create CloudFront invalidation
         run: aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/*"

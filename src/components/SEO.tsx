@@ -7,6 +7,9 @@ interface SEOProps {
     image?: string;
     article?: boolean;
     slug?: string;
+    author?: string;
+    publishDate?: string;
+    readingTime?: string;
 }
 
 export const SEO: React.FC<SEOProps> = ({
@@ -14,7 +17,10 @@ export const SEO: React.FC<SEOProps> = ({
     description,
     image = '/default-og-image.jpg',
     article = false,
-    slug = ''
+    slug = '',
+    author = 'Cooper Wallace',
+    publishDate,
+    readingTime
 }) => {
     const siteUrl = 'https://www.devsec-cooper.codes';
     const siteTitle = 'Cooper Wallace Blog';
@@ -25,6 +31,8 @@ export const SEO: React.FC<SEOProps> = ({
             {/* Basic */}
             <title>{`${title} | ${siteTitle}`}</title>
             <meta name="description" content={description} />
+            <meta name="robots" content="index, follow" />
+            <meta property="og:locale" content="en_US" />
 
             {/* Open Graph */}
             <meta property="og:site_name" content={siteTitle} />
@@ -44,6 +52,9 @@ export const SEO: React.FC<SEOProps> = ({
             {/* Additional for blog posts */}
             {article && (
                 <>
+                    <meta property="article:author" content={author} />
+                    {publishDate && <meta property="article:published_time" content={publishDate} />}
+                    {readingTime && <meta property="article:reading_time" content={readingTime} />}
                     <link rel="canonical" href={`${siteUrl}/post/${slug}`} />
                     <script type="application/ld+json">
                         {JSON.stringify({
@@ -53,9 +64,11 @@ export const SEO: React.FC<SEOProps> = ({
                             "image": [`${siteUrl}${image}`],
                             "url": `${siteUrl}/post/${slug}`,
                             "description": description,
+                            "datePublished": publishDate,
+                            "timeRequired": readingTime,
                             "author": {
                                 "@type": "Person",
-                                "name": "Cooper Wallace"
+                                "name": author
                             }
                         })}
                     </script>
