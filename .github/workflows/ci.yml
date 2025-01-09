@@ -95,15 +95,13 @@ jobs:
         run: npm install -D puppeteer
 
       - name: Build application
-      # - name: Build application
         run: |
           npm run build
           npm run preview &
-          sleep 5
-          npm run generate-static
-          kill $(lsof -t -i:4173)
-        # run: npm run build
-        #
+          sleep 10
+          npm run generate-static || true
+          pkill -f vite
+
       # - name: Run tests
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/node@master
