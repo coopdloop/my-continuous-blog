@@ -90,6 +90,10 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: npm install
+
+      - name: Install additional dependencies
+        run: npm install -D puppeteer
+
       - name: Build application
       # - name: Build application
         run: |

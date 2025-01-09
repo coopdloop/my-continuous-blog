@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
-    "generate-static": "ts-node scripts/generate-static.ts",
+    "build": "tsc -b && vite build && npm run preview & sleep 5 && npm run generate-static && kill $(lsof -t -i:4173)",
+    "generate-static": "node scripts/generate-static.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -33,7 +33,7 @@
     "@react-three/drei": "^9.117.3",
     "@react-three/fiber": "^8.17.10",
     "@tailwindcss/typography": "^0.5.15",
-    "@types/node": "^22.7.5",
+    "@types/node": "^22.10.5",
     "@types/react": "^18.3.10",
     "@types/react-dom": "^18.3.0",
     "@types/react-syntax-highlighter": "^15.5.13",
@@ -46,6 +46,7 @@
     "postcss": "^8.4.47",
     "puppeteer": "^23.11.1",
     "tailwindcss": "^3.4.14",
+    "ts-node": "^10.9.2",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.7.0",
     "vite": "^5.4.8",

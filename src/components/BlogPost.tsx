@@ -209,6 +209,7 @@ export const BlogPost: React.FC = () => {
                 slug={post.slug}
                 publishDate={post.frontmatter.pubDate}
                 readingTime={post.frontmatter.ttr}
+                author={post.frontmatter.author}
             />
             <div className="min-h-screen flex flex-col relative">
                 {/* Sidebar - hidden on mobile */}
