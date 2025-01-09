@@ -97,11 +97,9 @@ jobs:
       - name: Build application
         run: |
           npm run build
-          npm run preview &
-          sleep 10
-          npm run generate-static || true
-          pkill -f vite
-
+          npm run build:static
+        env:
+          NODE_ENV: production
       # - name: Run tests
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/node@master

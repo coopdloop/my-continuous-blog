@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && npm run preview & sleep 5 && npm run generate-static && kill $(lsof -t -i:4173)",
+    "build": "tsc -b && vite build",
+    "build:static": "npm run preview & sleep 10 && npm run generate-static && pkill -f vite",
     "generate-static": "node scripts/generate-static.js",
     "lint": "eslint .",
     "preview": "vite preview"
