@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -177,7 +177,7 @@ export const BlogPost: React.FC = () => {
     const [showSidebar, setShowSidebar] = useState(true);
     const { slug } = useParams<{ slug: string }>();
     const post = getPostBySlug(slug || '') as BlogPostType | undefined;
-    const location = useLocation();
+    // const location = useLocation();
 
 
     const toggleSidebar = () => {
