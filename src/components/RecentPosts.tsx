@@ -53,7 +53,7 @@ export const RecentPosts: React.FC<RecentPostsProps> = ({ posts }) => {
                                     <p className="text-slate-300 text-sm line-clamp-3 mb-4 leading-relaxed">
                                         {post.frontmatter.description}
                                     </p>
-                                    
+
                                     {/* Tags */}
                                     <div className="flex flex-wrap gap-2 mb-4">
                                         {post.frontmatter.tags.slice(0, 3).map(tag => (
@@ -91,7 +91,7 @@ export const RecentPosts: React.FC<RecentPostsProps> = ({ posts }) => {
             {/* Enhanced Decorative Elements */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
                 <motion.div
-                    animate={{ 
+                    animate={{
                         x: [0, 100, 0],
                         y: [0, -50, 0]
                     }}
@@ -99,7 +99,7 @@ export const RecentPosts: React.FC<RecentPostsProps> = ({ posts }) => {
                     className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"
                 />
                 <motion.div
-                    animate={{ 
+                    animate={{
                         x: [0, -100, 0],
                         y: [0, 50, 0]
                     }}
