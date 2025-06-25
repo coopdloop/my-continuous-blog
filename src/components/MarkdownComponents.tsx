@@ -25,11 +25,21 @@ const commonLanguages = {
   python: () => import('react-syntax-highlighter/dist/esm/languages/prism/python'),
 };
 
-// Register languages asynchronously
+// Track loaded languages to prevent double registration
+const loadedLanguages = new Set<string>();
+
+// Register languages asynchronously with error handling
 Object.entries(commonLanguages).forEach(([language, importFn]) => {
-  importFn().then(mod => {
-    SyntaxHighlighter.registerLanguage(language, mod.default);
-  });
+  importFn()
+    .then(mod => {
+      if (!loadedLanguages.has(language)) {
+        SyntaxHighlighter.registerLanguage(language, mod.default);
+        loadedLanguages.add(language);
+      }
+    })
+    .catch(error => {
+      console.warn(`Failed to load syntax highlighter for ${language}:`, error);
+    });
 });
 
 // Define markdown components with correct typing
@@ -44,10 +54,20 @@ const MarkdownComponents: Components = {
 
     useEffect(() => {
       if (match && commonLanguages[language as keyof typeof commonLanguages]) {
-        commonLanguages[language as keyof typeof commonLanguages]().then(mod => {
-          SyntaxHighlighter.registerLanguage(language, mod.default);
-          setIsLanguageLoaded(true);
-        });
+        commonLanguages[language as keyof typeof commonLanguages]()
+          .then(mod => {
+            if (!loadedLanguages.has(language)) {
+              SyntaxHighlighter.registerLanguage(language, mod.default);
+              loadedLanguages.add(language);
+            }
+            setIsLanguageLoaded(true);
+          })
+          .catch(error => {
+            console.warn(`Failed to load syntax highlighter for ${language}:`, error);
+            setIsLanguageLoaded(true); // Still show as loaded to prevent infinite loading
+          });
+      } else {
+        setIsLanguageLoaded(true);
       }
     }, [language]);
 

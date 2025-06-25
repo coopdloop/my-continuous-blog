@@ -55,17 +55,29 @@ export const NavBar: React.FC = () => {
 
     const NavLink: React.FC<NavLinkProps> = ({ to, icon, children }) => (
         <Link to={to}>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <motion.div
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                className="relative"
+            >
                 <Button
                     variant={isActive(to) ? "default" : "ghost"}
                     size="sm"
-                    className={`w-full justify-start transition-all duration-300 ${isActive(to)
-                        ? "bg-amber-500 text-slate-900"
-                        : "hover:bg-amber-500/10 text-slate-200"
+                    className={`relative w-full justify-start transition-all duration-300 border ${isActive(to)
+                        ? "bg-gradient-to-r from-purple-500 to-cyan-500 text-white border-purple-400/50 shadow-lg shadow-purple-500/25"
+                        : "hover:bg-purple-500/10 text-slate-200 border-transparent hover:border-purple-500/30 hover:shadow-md hover:shadow-purple-500/10"
                         }`}
                 >
                     {icon}
-                    <span className="ml-2">{children}</span>
+                    <span className="ml-2 font-medium">{children}</span>
+                    {isActive(to) && (
+                        <motion.div
+                            className="absolute -bottom-1 left-1/2 w-4 h-0.5 bg-cyan-400 rounded-full"
+                            layoutId="activeTab"
+                            initial={false}
+                            style={{ x: '-50%' }}
+                        />
+                    )}
                 </Button>
             </motion.div>
         </Link>
@@ -73,7 +85,7 @@ export const NavBar: React.FC = () => {
 
     return (
         <motion.nav
-            className="bg-slate-950/50 backdrop-blur-md border-b border-amber-500/10 sticky top-0 z-50"
+            className="bg-slate-950/90 backdrop-blur-md border-b border-purple-500/20 sticky top-0 z-50 shadow-lg shadow-purple-500/5"
             initial={{ y: 0 }}
             animate={{ y: isVisible ? 0 : -100 }}
             transition={{ duration: 0.3 }}
@@ -83,13 +95,21 @@ export const NavBar: React.FC = () => {
 
                 <div className="flex items-center justify-between h-16">
                     <motion.div
-                        className="flex items-center"
-                        whileHover={{ scale: 1.05 }}
+                        className="flex items-center space-x-3"
+                        whileHover={{ scale: 1.02 }}
                     >
-                        <Link to="/" className="text-2xl font-bold">
-                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-secondary via-purple-500 to-secondary">
-                                devsec-cooper.codes
-                            </span>
+                        <Link to="/" className="flex items-center space-x-2">
+                            <div className="relative">
+                                <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-cyan-500 rounded-md flex items-center justify-center">
+                                    <CodeIcon className="w-4 h-4 text-white" />
+                                </div>
+                                <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                            </div>
+                            <div className="text-xl font-bold">
+                                <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-cyan-400 to-purple-400 font-mono">
+                                    devsec-cooper.codes
+                                </span>
+                            </div>
                         </Link>
                     </motion.div>
 
@@ -98,7 +118,7 @@ export const NavBar: React.FC = () => {
                         <NavLink to="/" icon={<HomeIcon className="h-4 w-4" />}>Home</NavLink>
                         <NavLink to="/about" icon={<InfoIcon className="h-4 w-4" />}>About</NavLink>
                         <NavLink to="/posts" icon={<BookOpenIcon className="h-4 w-4" />}>Posts</NavLink>
-                        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                        <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }}>
                             <a
                                 href="https://github.com/coopdloop/my-continuous-blog"
                                 target="_blank"
@@ -107,20 +127,22 @@ export const NavBar: React.FC = () => {
                                 <Button
                                     variant="ghost"
                                     size="sm"
-                                    className="hover:bg-primary/10 text-white"
+                                    className="border border-transparent hover:border-purple-500/30 hover:bg-purple-500/10 text-slate-200 hover:shadow-md hover:shadow-purple-500/10 transition-all duration-300"
                                 >
                                     <CodeIcon className="mr-2 h-4 w-4" />
                                     Source
                                 </Button>
                             </a>
                         </motion.div>
-                        <motion.div whileHover={{ scale: 1.05 }}>
+                        <motion.div whileHover={{ scale: 1.05, y: -2 }}>
                             <ModeToggle />
                         </motion.div>
 
-                        <Link to="/rss.xml" className="items-center text-amber-400 hover:text-amber-300">
-                            <RssIcon className="h-4 w-4" />
-                        </Link>
+                        <motion.div whileHover={{ scale: 1.1, y: -2 }}>
+                            <Link to="/rss.xml" className="flex items-center p-2 rounded-md border border-transparent hover:border-cyan-500/30 hover:bg-cyan-500/10 transition-all duration-300">
+                                <RssIcon className="h-4 w-4 text-cyan-400 hover:text-cyan-300" />
+                            </Link>
+                        </motion.div>
                     </div>
 
                     {/* Mobile Menu Button */}
@@ -130,9 +152,14 @@ export const NavBar: React.FC = () => {
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                                className="hover:bg-primary/10"
+                                className="border border-transparent hover:border-purple-500/30 hover:bg-purple-500/10 transition-all duration-300"
                             >
-                                {isMenuOpen ? <XIcon className="h-6 w-6" /> : <MenuIcon className="h-6 w-6" />}
+                                <motion.div
+                                    animate={{ rotate: isMenuOpen ? 90 : 0 }}
+                                    transition={{ duration: 0.2 }}
+                                >
+                                    {isMenuOpen ? <XIcon className="h-6 w-6 text-slate-200" /> : <MenuIcon className="h-6 w-6 text-slate-200" />}
+                                </motion.div>
                             </Button>
                         </motion.div>
                     </div>
@@ -147,14 +174,14 @@ export const NavBar: React.FC = () => {
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: "auto" }}
                             exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="md:hidden border-t border-primary/10 bg-background/80 backdrop-blur-md"
+                            transition={{ duration: 0.3 }}
+                            className="md:hidden border-t border-purple-500/20 bg-slate-900/95 backdrop-blur-md shadow-lg"
                         >
-                            <div className="px-4 py-3 space-y-3">
+                            <div className="px-4 py-4 space-y-3">
                                 <NavLink to="/" icon={<HomeIcon className="h-4 w-4" />}>Home</NavLink>
                                 <NavLink to="/about" icon={<InfoIcon className="h-4 w-4" />}>About</NavLink>
                                 <NavLink to="/posts" icon={<BookOpenIcon className="h-4 w-4" />}>Posts</NavLink>
-                                <motion.div whileHover={{ scale: 1.05 }}>
+                                <motion.div whileHover={{ scale: 1.02 }}>
                                     <a
                                         href="https://github.com/coopdloop/my-continuous-blog"
                                         target="_blank"
@@ -164,16 +191,21 @@ export const NavBar: React.FC = () => {
                                         <Button
                                             variant="ghost"
                                             size="sm"
-                                            className="w-full justify-start hover:bg-primary/10"
+                                            className="w-full justify-start border border-transparent hover:border-purple-500/30 hover:bg-purple-500/10 text-slate-200 transition-all duration-300"
                                         >
                                             <CodeIcon className="mr-2 h-4 w-4" />
                                             Source
                                         </Button>
                                     </a>
                                 </motion.div>
-                                <div className="flex justify-between items-center">
+                                <div className="flex justify-between items-center pt-2 border-t border-slate-700/50">
                                     <motion.div whileHover={{ scale: 1.05 }}>
                                         <ModeToggle />
+                                    </motion.div>
+                                    <motion.div whileHover={{ scale: 1.1 }}>
+                                        <Link to="/rss.xml" className="flex items-center p-2 rounded-md border border-transparent hover:border-cyan-500/30 hover:bg-cyan-500/10 transition-all duration-300">
+                                            <RssIcon className="h-4 w-4 text-cyan-400" />
+                                        </Link>
                                     </motion.div>
                                 </div>
                             </div>
