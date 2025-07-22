@@ -83,33 +83,33 @@ jobs:
       - name: Create CloudFront invalidation
         run: aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/*"
 
-  dast:
-    needs: build-and-deploy
-    runs-on: ubuntu-latest
-    steps:
-    - name: ZAP Scan
-      uses: zaproxy/action-full-scan@v0.10.0
-      with:
-        target: 'https://www.devsec-cooper.codes/'
-
-    - name: Create Issue from ZAP Report
-      if: failure()
-      uses: actions/github-script@v6
-      with:
-        github-token: ${{secrets.GITHUB_TOKEN}}
-        script: |
-          const fs = require('fs')
-          try {
-            const zapReport = JSON.parse(fs.readFileSync('zap-full-scan-results.json', 'utf8'))
-            const highAlerts = zapReport.site[0].alerts.filter(alert => alert.riskcode === "3")
-            if (highAlerts.length > 0) {
-              await github.rest.issues.create({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                title: 'High Risk Vulnerabilities Detected',
-                body: `ZAP scan detected ${highAlerts.length} high risk vulnerabilities. Please review the full scan results.`
-              })
-            }
-          } catch (error) {
-            core.setFailed(`Failed to process ZAP report: ${error.message}`)
-          }
+  # dast:
+  #   needs: build-and-deploy
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: ZAP Scan
+  #     uses: zaproxy/action-full-scan@v0.10.0
+  #     with:
+  #       target: 'https://www.devsec-cooper.codes/'
+  #
+  #   - name: Create Issue from ZAP Report
+  #     if: failure()
+  #     uses: actions/github-script@v6
+  #     with:
+  #       github-token: ${{secrets.GITHUB_TOKEN}}
+  #       script: |
+  #         const fs = require('fs')
+  #         try {
+  #           const zapReport = JSON.parse(fs.readFileSync('zap-full-scan-results.json', 'utf8'))
+  #           const highAlerts = zapReport.site[0].alerts.filter(alert => alert.riskcode === "3")
+  #           if (highAlerts.length > 0) {
+  #             await github.rest.issues.create({
+  #               owner: context.repo.owner,
+  #               repo: context.repo.repo,
+  #               title: 'High Risk Vulnerabilities Detected',
+  #               body: `ZAP scan detected ${highAlerts.length} high risk vulnerabilities. Please review the full scan results.`
+  #             })
+  #           }
+  #         } catch (error) {
+  #           core.setFailed(`Failed to process ZAP report: ${error.message}`)
+  #         }

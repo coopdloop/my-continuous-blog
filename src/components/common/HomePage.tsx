@@ -22,28 +22,6 @@ export const HomePage: React.FC = () => {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-slate-900 to-black" />
         {/* Animated Grid */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
-        {/* Binary Rain Effect */}
-        {[...Array(25)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute text-green-500/30 text-xs font-mono select-none"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `-10%`,
-            }}
-            animate={{
-              y: ["0vh", "110vh"],
-            }}
-            transition={{
-              duration: Math.random() * 10 + 8,
-              repeat: Infinity,
-              ease: "linear",
-              delay: Math.random() * 10,
-            }}
-          >
-            {Math.random() > 0.5 ? '1' : '0'}
-          </motion.div>
-        ))}
         {/* Glowing Circuit Lines */}
         <div className="absolute top-1/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
         <div className="absolute top-3/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
@@ -165,19 +143,6 @@ export const HomePage: React.FC = () => {
                       </p>
                     </motion.div>
 
-                    {/* Decorative circuit elements */}
-                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 pointer-events-none">
-                      <motion.div
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-                        className="absolute inset-0 border border-purple-500/10 rounded-full"
-                      />
-                      <motion.div
-                        animate={{ rotate: -360 }}
-                        transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
-                        className="absolute inset-8 border border-cyan-500/10 rounded-full"
-                      />
-                    </div>
                   </div>
 
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/10 to-transparent blur-3xl" />
@@ -189,31 +154,6 @@ export const HomePage: React.FC = () => {
         </AnimatePresence>
       </div>
 
-      {/* Floating Code Particles */}
-      <div className="absolute inset-0 pointer-events-none">
-        {[...Array(15)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute text-purple-500/20 text-xs font-mono"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              y: [0, -30, 0],
-              x: [0, Math.random() * 20 - 10, 0],
-              opacity: [0.1, 0.3, 0.1],
-            }}
-            transition={{
-              duration: Math.random() * 8 + 8,
-              repeat: Infinity,
-              repeatType: "reverse",
-            }}
-          >
-            {['{}', '[]', '()', '<>', '/>', '&&', '||', '=>'][Math.floor(Math.random() * 8)]}
-          </motion.div>
-        ))}
-      </div>
     </div>
   );
 };
