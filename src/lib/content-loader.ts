@@ -18,7 +18,7 @@ function parseMarkdown(content: string): { frontmatter: BlogPostFrontmatter; con
   }
 
   const [, frontmatterText, markdownContent] = match;
-  
+
   // Parse YAML frontmatter
   const frontmatter: any = {};
   frontmatterText.split('\n').forEach(line => {
@@ -26,7 +26,7 @@ function parseMarkdown(content: string): { frontmatter: BlogPostFrontmatter; con
     if (colonIndex !== -1) {
       const key = line.slice(0, colonIndex).trim();
       const value = line.slice(colonIndex + 1).trim().replace(/^["']|["']$/g, '');
-      
+
       if (key === 'tags') {
         frontmatter[key] = value.split(',').map(tag => tag.trim());
       } else if (key === 'pubDate') {
@@ -100,7 +100,7 @@ export function getAllPosts(): BlogPost[] {
   });
 
   // Sort by publication date (newest first)
-  return posts.sort((a, b) => 
+  return posts.sort((a, b) =>
     new Date(b.frontmatter.pubDate).getTime() - new Date(a.frontmatter.pubDate).getTime()
   );
 }
@@ -117,8 +117,8 @@ export function getAllPostSlugs(): string[] {
 
 export function getPostsByTag(tag: string): BlogPost[] {
   const posts = getAllPosts();
-  return posts.filter(post => 
-    post.frontmatter.tags.some(postTag => 
+  return posts.filter(post =>
+    post.frontmatter.tags.some(postTag =>
       postTag.toLowerCase() === tag.toLowerCase()
     )
   );
@@ -127,11 +127,11 @@ export function getPostsByTag(tag: string): BlogPost[] {
 export function getAllTags(): string[] {
   const posts = getAllPosts();
   const tags = new Set<string>();
-  
+
   posts.forEach(post => {
     post.frontmatter.tags.forEach(tag => tags.add(tag));
   });
-  
+
   return Array.from(tags).sort();
 }
 

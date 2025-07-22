@@ -16,7 +16,7 @@ export const blogConfig = {
   categories: [
     "DevSecOps",
     "Security",
-    "Cloud Architecture", 
+    "Cloud Architecture",
     "Automation",
     "Compliance",
     "AI/ML",
