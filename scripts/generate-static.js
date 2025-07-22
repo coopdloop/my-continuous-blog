@@ -11,7 +11,7 @@ async function generateStaticPages () {
   const browser = await puppeteer.launch()
   const outputDir = path.join(__dirname, '../dist/static')
 
-  const contentDir = path.join(__dirname, '../src/posts')
+  const contentDir = path.join(__dirname, '../src/content/posts')
   const files = await fs.readdir(contentDir)
   const slugs = files.map(f => f.replace('.md', ''))
 

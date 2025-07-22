@@ -15,8 +15,8 @@ import {
     SparklesIcon,
 } from 'lucide-react';
 import { BlogPost } from '@/types/blog';
-import { getAllPosts } from '@/utils/markdown-loader';
-import { SEO } from './SEO';
+import { getAllPosts } from '@/lib/content-loader';
+import { SEO } from '../layout/SEO';
 
 interface FilterState {
     tags: string[];

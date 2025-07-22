@@ -33,4 +33,5 @@ export interface BlogPostFrontmatter {
     image: Image;
     tags: string[];
     ttr: string;
+    projectLink?: string;
 }

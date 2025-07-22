@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { getAllPosts } from '@/utils/markdown-loader';
+import { getAllPosts } from '@/lib/content-loader';
 import { BlogPost } from '@/types/blog';
-import { RecentPosts } from './RecentPosts';
+import { RecentPosts } from '../blog/RecentPosts';
 import { Terminal } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 

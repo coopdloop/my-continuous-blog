@@ -1,7 +1,7 @@
 // src/components/RSSFeedPage.tsx
 import { useEffect } from 'react';
-import { getAllPosts } from '@/utils/markdown-loader';
-import { generateRSSFeed } from '@/utils/rss-generator';
+import { getAllPosts } from '@/lib/content-loader';
+import { generateRSSFeed } from '@/lib/rss-generator';
 
 export const RSSFeedPage: React.FC = () => {
   useEffect(() => {

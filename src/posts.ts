@@ -83,7 +83,7 @@ function parseFrontmatter(content: string): {
   };
 }
 
-const postFiles = import.meta.glob('./posts/*.md', { as: 'raw', eager: true });
+const postFiles = import.meta.glob('./content/posts/*.md', { as: 'raw', eager: true });
 
 export const posts: BlogPost[] = Object.entries(postFiles).map(([filepath, content]) => {
   const { frontmatter, content: postContent, tableOfContents } = parseFrontmatter(content as string);

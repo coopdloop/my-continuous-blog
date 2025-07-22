@@ -103,7 +103,6 @@ export const NavBar: React.FC = () => {
                                 <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-cyan-500 rounded-md flex items-center justify-center">
                                     <CodeIcon className="w-4 h-4 text-white" />
                                 </div>
-                                <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
                             </div>
                             <div className="text-xl font-bold">
                                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-cyan-400 to-purple-400 font-mono">

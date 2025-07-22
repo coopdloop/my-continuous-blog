@@ -1,16 +1,13 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import { ThemeProvider } from "@/components/theme-provider";
-import { NavBar } from '@/components/NavBar';
-import { HomePage } from '@/components/HomePage';
-import { BlogPost } from '@/components/BlogPost';
-import { AboutPage } from '@/components/AboutPage';
+import { NavBar } from '@/components/layout';
+import { HomePage, AboutPage, RSSFeedPage } from '@/components/common';
+import { BlogPost, PostsPage } from '@/components/blog';
 import { motion, AnimatePresence } from 'framer-motion';
-import { PostsPage } from './components/PostsPage';
-import EnhancedBackground from './components/EnhancedBackground';
-import { Toaster } from './components/ui/toaster';
+import { EnhancedBackground } from '@/components/effects';
+import { Toaster } from '@/components/ui/toaster';
 import { HelmetProvider } from 'react-helmet-async';
-import { RSSFeedPage } from './components/RSSFeedPage';
 
 // Not Found Page Component
 const NotFoundPage: React.FC = () => (
