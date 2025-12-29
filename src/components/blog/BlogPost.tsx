@@ -398,12 +398,11 @@ export const BlogPost: React.FC = () => {
                                         animate={{ opacity: 1 }}
                                         transition={{ delay: 0.8, duration: 0.6 }}
                                     >
-                                        <ReactMarkdown
-                                            className="blog-post-content text-slate-200"
-                                            components={MarkdownComponents}
-                                        >
-                                            {post.content}
-                                        </ReactMarkdown>
+                                        <div className="blog-post-content text-slate-200">
+                                            <ReactMarkdown components={MarkdownComponents}>
+                                                {post.content}
+                                            </ReactMarkdown>
+                                        </div>
                                     </motion.div>
                                 </CardContent>
                             </Card>
