@@ -39,7 +39,7 @@ async function run() {
   } catch (error) {
     core.warning(`Failed to get latest Node.js version: ${error.message}`);
     core.warning('Falling back to default Node.js version');
-    core.setOutput('node-version', '18.17.1'); // Fallback to the latest version in your CI matrix
+    core.setOutput('node-version', '24.12.0'); // Fallback to the latest version in your CI matrix
   }
 }
 
