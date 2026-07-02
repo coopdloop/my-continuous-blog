@@ -91,9 +91,6 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Install additional dependencies
-        run: yarn add -D puppeteer
-
       - name: Build application
         run: |
           yarn build

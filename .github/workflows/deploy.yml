@@ -56,9 +56,6 @@ jobs:
       # - name: Deploy to S3
       #   run: aws s3 sync --delete ./dist/ s3://${{ secrets.BUCKET_ID }}
 
-      - name: Install additional dependencies
-        run: yarn add -D puppeteer
-
       - name: Build application
         run: |
           yarn build
