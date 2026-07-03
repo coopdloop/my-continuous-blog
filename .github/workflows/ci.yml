@@ -89,7 +89,9 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - name: Install dependencies
-        run: npm install --force
+        run: |
+          rm -rf node_modules package-lock.json
+          npm install
 
       - name: Build application
         run: |
@@ -99,6 +101,7 @@ jobs:
           NODE_ENV: production
       # - name: Run tests
       - name: Run Snyk to check for vulnerabilities
+        if: ${{ !env.ACT }}
         uses: snyk/actions/node@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
