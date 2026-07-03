@@ -27,3 +27,4 @@ tsconfig.app.tsbuildinfo
 
 # WIP
 src/posts/securing_the_cyber_world.md
+.secrets

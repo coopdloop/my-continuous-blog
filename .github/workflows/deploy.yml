@@ -24,10 +24,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24'
-          cache: 'yarn'
+          cache: 'npm'
 
       - name: Install dependencies for script
-        run: yarn add @actions/github @actions/core
+        run: npm install @actions/github @actions/core
 
       - name: Get latest Node.js version
         id: get-node-version
@@ -39,7 +39,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ steps.get-node-version.outputs.node-version }}
-          cache: 'yarn'
+          cache: 'npm'
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -48,18 +48,12 @@ jobs:
           aws-region: us-east-1
 
       - name: Install modules
-        run: yarn install --frozen-lockfile
-
-      # - name: Build application
-      #   run: yarn build
-      #
-      # - name: Deploy to S3
-      #   run: aws s3 sync --delete ./dist/ s3://${{ secrets.BUCKET_ID }}
+        run: npm install
 
       - name: Build application
         run: |
-          yarn build
-          yarn build:static || true
+          npm run build
+          npm run build:static || true
         env:
           NODE_ENV: production
 

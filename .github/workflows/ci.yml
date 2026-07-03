@@ -87,14 +87,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'yarn'
+          cache: 'npm'
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: npm install --force
 
       - name: Build application
         run: |
-          yarn build
-          yarn build:static || true
+          npm run build
+          npm run build:static || true
         env:
           NODE_ENV: production
       # - name: Run tests
