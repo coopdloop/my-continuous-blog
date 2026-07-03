@@ -49,7 +49,7 @@ const App: React.FC = () => {
                             <div className="max-w-4xl mx-auto px-4 sm:px-6">
                                 <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                                     <p className="text-sm text-muted-foreground">
-                                        © 2024 Cooper Wallace
+                                        © 2026 Cooper Wallace
                                     </p>
                                     <div className="flex items-center gap-6">
                                         <a

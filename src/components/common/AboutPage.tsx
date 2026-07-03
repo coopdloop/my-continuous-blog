@@ -9,7 +9,7 @@ export const AboutPage: React.FC = () => {
         firstName: "Cooper",
         lastName: "Wallace",
         country: "USA",
-        occupation: "Lead Cloud Security Engineer",
+        occupation: "SecOps Engineer",
         hobbies: ["Consulting", "Start-ups", "Hiking", "Gym", "Cooking", "Philosophy"],
         email: "cooper@lariatlabs.dev",
         skills: [
@@ -21,18 +21,54 @@ export const AboutPage: React.FC = () => {
 
     const experience = [
         {
-            title: "Lead Cloud Security Engineer",
-            companyName: "Zerofox",
+            title: "SecOps Engineer",
+            companyName: "Cisco",
+            employmentType: "Contract",
+            imageUrl: "/cisco-2.webp",
+            workDurationStart: "Mar 2025",
+            workDurationEnd: "Present",
+            location: "Remote",
+            description: "Develop, observe, and engineer a new Security logging platform suite including Splunk Enterprise Security and ELK. Build out and validate data onboarded into the platform and develop rules and detections to find security anomalies with security contextual data from apps and vendor products."
+        },
+        {
+            title: "Independent Consultant",
+            companyName: "Independent",
+            employmentType: "Full-time",
+            imageUrl: "",
+            workDurationStart: "Nov 2024",
+            workDurationEnd: "Present",
+            location: "Remote",
+            description: "Deploy logging producers and monitor security contextual logs in various ELK monitoring solutions and Splunk. Perform vulnerability management of images and container runtime environments in Kubernetes. Implement asset reconciliation pipeline into separate indexer to provide product infrastructure gap coverage."
+        },
+        {
+            title: "Cloud Security Engineer",
+            companyName: "ZeroFox",
+            employmentType: "Full-time",
             imageUrl: "https://embed-ssl.wistia.com/deliveries/1b1347fa71c7b54d5b498a938f9dfeb9.webp?image_crop_resized=960x540",
-            workDurationEnd: "Current",
-            workDurationStart: "Mar 2022"
+            workDurationStart: "Mar 2022",
+            workDurationEnd: "Nov 2024",
+            location: "Remote",
+            description: "Led Public Sector Engineer-Ops in developing secure cloud applications and services for Federal customers. Ensured compliance in the cloud following standards such as NIST, ISO 27001, and FedRAMP."
         },
         {
             title: "Sr. Security Engineer",
             companyName: "Ankura",
+            employmentType: "Full-time",
             imageUrl: "https://forms.ankura.com/hs-fs/hubfs/Logos/New%20Logo-01.png?width=950&height=263&name=New%20Logo-01.png",
+            workDurationStart: "Jul 2020",
             workDurationEnd: "Mar 2022",
-            workDurationStart: "Dec 2018"
+            location: "Washington, DC",
+            description: "Deployed security monitoring solutions and network traffic analysis suites onto customer infra through automated processes. Integrated and engineered YARA rules and threat detection into centralized SIEM for analysis."
+        },
+        {
+            title: "Security Analyst",
+            companyName: "Ankura",
+            employmentType: "Full-time",
+            imageUrl: "https://forms.ankura.com/hs-fs/hubfs/Logos/New%20Logo-01.png?width=950&height=263&name=New%20Logo-01.png",
+            workDurationStart: "Apr 2020",
+            workDurationEnd: "Jul 2020",
+            location: "Washington, DC",
+            description: ""
         }
     ];
 
@@ -117,7 +153,7 @@ export const AboutPage: React.FC = () => {
                         <div className="space-y-1">
                             <span className="inline-flex items-center gap-1.5 px-2 py-1 text-xs font-medium bg-primary/10 text-primary rounded border border-primary/20">
                                 <Terminal className="w-3 h-3" />
-                                {identity.occupation}
+                                Security Engineer
                             </span>
                             <h2 className="text-2xl font-bold text-foreground">
                                 {identity.firstName} {identity.lastName}
@@ -180,24 +216,37 @@ export const AboutPage: React.FC = () => {
                             <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide">Experience</h3>
                         </div>
                         <div className="space-y-3">
-                            {experience.map(job => (
+                            {experience.map((job, idx) => (
                                 <div
-                                    key={job.companyName}
+                                    key={`${job.companyName}-${idx}`}
                                     className="flex gap-4 p-4 rounded-lg border border-border bg-background hover:border-border/80 transition-colors"
                                 >
                                     <div className="flex-none w-12 h-12 rounded overflow-hidden bg-muted flex items-center justify-center">
-                                        <img
-                                            src={job.imageUrl}
-                                            alt={job.companyName}
-                                            className="w-full h-full object-contain p-1"
-                                        />
+                                        {job.imageUrl ? (
+                                            <img
+                                                src={job.imageUrl}
+                                                alt={job.companyName}
+                                                className="w-full h-full object-contain p-1"
+                                            />
+                                        ) : (
+                                            <Briefcase className="w-6 h-6 text-muted-foreground" />
+                                        )}
                                     </div>
-                                    <div className="space-y-0.5">
+                                    <div className="space-y-1 min-w-0">
                                         <h4 className="text-sm font-medium text-foreground">{job.title}</h4>
-                                        <p className="text-sm text-primary">{job.companyName}</p>
+                                        <p className="text-sm text-primary">
+                                            {job.companyName}
+                                            {job.employmentType && (
+                                                <span className="ml-2 text-xs text-muted-foreground font-normal">· {job.employmentType}</span>
+                                            )}
+                                        </p>
                                         <p className="text-xs text-muted-foreground">
                                             {job.workDurationStart} — {job.workDurationEnd}
+                                            {job.location && <span className="ml-2">· {job.location}</span>}
                                         </p>
+                                        {job.description && (
+                                            <p className="text-xs text-muted-foreground leading-relaxed pt-1">{job.description}</p>
+                                        )}
                                     </div>
                                 </div>
                             ))}
