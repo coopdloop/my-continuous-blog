@@ -51,6 +51,9 @@ const App: React.FC = () => {
                                     <p className="text-sm text-muted-foreground">
                                         © 2026 Cooper Wallace
                                     </p>
+                                    <p className="text-xs text-muted-foreground/50 font-mono">
+                                        v{__APP_VERSION__}
+                                    </p>
                                     <div className="flex items-center gap-6">
                                         <a
                                             href="https://www.linkedin.com/in/cooper-wallace-0a572a158"
